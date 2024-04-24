@@ -7,7 +7,7 @@ export type CardRatingProps = {
 
 const CardRating = ({ rating, setRating }: CardRatingProps) => {
   return (
-    <Box>
+    <Box px={2}>
       <Typography component="legend">Calificación</Typography>
       <Rating
         name="simple-controlled"

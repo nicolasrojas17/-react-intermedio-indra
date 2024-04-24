@@ -16,12 +16,12 @@ const CardItem = ({ img, altImg, title, description }: CardItemProps) => {
   const [rating, setRating] = useState<number>(4);
   return (
     <Grid item xs={12} sm={6} md={4} lg={3}>
-      <Card>
+      <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
         <Stack direction="row" m={2}>
           <CardDiscount discount={80} />
         </Stack>
-        <CardMedia sx={{ height: 200, width: "100%" }} component={"img"} image={img} alt={altImg} />
-        <CardContent>
+        <CardMedia sx={{ height: 200, width: "100%" }} component={"img"} image={img} alt={altImg} loading="lazy" />
+        <CardContent sx={{ flexGrow: 1 }}>
           <Typography gutterBottom variant="h5" component="div">
             {title}
           </Typography>
@@ -32,10 +32,10 @@ const CardItem = ({ img, altImg, title, description }: CardItemProps) => {
           >
             {description}
           </Typography>
-          <CardRating rating={rating} setRating={setRating} />
         </CardContent>
+        <CardRating rating={rating} setRating={setRating} />
         <CardActions sx={{ display: "flex", justifyContent: "space-between" }}>
-          <CardModalInfo title={title} description={description} altImg={altImg} img={img}/>
+          <CardModalInfo title={title} description={description} altImg={altImg} img={img} />
         </CardActions>
       </Card>
     </Grid>
