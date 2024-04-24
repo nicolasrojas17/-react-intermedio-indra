@@ -1,10 +1,11 @@
-import InboxIcon from "@mui/icons-material/Inbox";
 import MenuIcon from "@mui/icons-material/Menu";
 import { AppBar, Box, Container, Drawer, IconButton, Toolbar, Typography } from "@mui/material";
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
+import Menu from "./Menu";
+import MoreInfo from "./MoreInfo/MoreInfo";
 import NavListDrawer from "./NavListDrawer";
 import Search from "./Search/Search";
-import MoreInfo from "./MoreInfo/MoreInfo";
+import { useLocation } from "react-router-dom";
 
 export type MenuItem = {
   title: string;
@@ -12,20 +13,24 @@ export type MenuItem = {
   icon: ReactElement;
 };
 
-const navLinks: MenuItem[] = [
-  { title: "Home", path: "/", icon: <InboxIcon /> },
-  { title: "Profile", path: "/profile", icon: <InboxIcon /> },
-];
+export type NavbarProps = {
+  navLinks: MenuItem[];
+};
 
-const Navbar = () => {
+const Navbar = ({ navLinks }: NavbarProps) => {
   const [open, setOpen] = useState<boolean>(false);
+
+  const [activePage, setActivePage] = useState("/");
+  const location = useLocation();
+
+  useEffect(() => setOpen(false), [location]);
 
   return (
     <>
       <AppBar position="static">
         <Container maxWidth="xl">
           <Toolbar>
-            <Box>
+            <Box sx={{ display: { xs: "block", md: "none" } }}>
               <IconButton color="inherit" size="large" onClick={() => setOpen(true)}>
                 <MenuIcon />
               </IconButton>
@@ -39,9 +44,11 @@ const Navbar = () => {
         </Container>
       </AppBar>
 
-      <Drawer open={open} anchor="left" onClose={() => setOpen(false)}>
+      <Drawer sx={{ display: { xs: "block", md: "none" } }} open={open} anchor="left" onClose={() => setOpen(false)}>
         <NavListDrawer navLinks={navLinks} />
       </Drawer>
+
+      <Menu activePage={activePage} setActivePage={setActivePage} navLinks={navLinks} />
     </>
   );
 };

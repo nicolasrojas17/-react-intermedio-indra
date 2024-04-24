@@ -1,7 +1,6 @@
-import { Container, Grid } from "@mui/material";
-import CardItem from "../components/Card/CardItem";
-import Navbar from "../components/Header/NavBar";
+import { Grid } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
+import CardItem from "../components/Card/CardItem";
 import CardSkeleton from "../components/Card/CardSkeleton";
 
 const Home = () => {
@@ -17,31 +16,24 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    setTimeout(() => {
-      fetchProducts();
-    }, 1);
+    fetchProducts();
   }, [fetchProducts]);
 
   return (
-    <>
-      <Navbar />
-      <Container>
-        <Grid container spacing={2} my={2}>
-          {isLoading
-            ? Array.from(new Array(12)).map((_, index) => [<CardSkeleton key={index + 1} />])
-            : products.map((product: any, index) => [
-                <CardItem
-                  key={product.id}
-                  img={product.image}
-                  altImg={`card item-${index + 1}`}
-                  price={product.price}
-                  title={product.title}
-                  description={product.description}
-                />,
-              ])}
-        </Grid>
-      </Container>
-    </>
+    <Grid container maxWidth={"xl"} spacing={2} my={2} >
+      {isLoading
+        ? Array.from(new Array(12)).map((_, index) => [<CardSkeleton key={index + 1} />])
+        : products.map((product: any, index) => [
+            <CardItem
+              key={product.id}
+              img={product.image}
+              altImg={`card item-${index + 1}`}
+              price={product.price}
+              title={product.title}
+              description={product.description}
+            />,
+          ])}
+    </Grid>
   );
 };
 
