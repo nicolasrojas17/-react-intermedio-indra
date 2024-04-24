@@ -34,6 +34,7 @@ const Home = () => {
                   key={product.id}
                   img={product.image}
                   altImg={`card item-${index + 1}`}
+                  price={product.price}
                   title={product.title}
                   description={product.description}
                 />,
