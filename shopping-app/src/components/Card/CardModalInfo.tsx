@@ -38,7 +38,7 @@ const CardModalInfo = ({ title, description, altImg, img }: CardModalInfoProps) 
       </IconButton>
 
       <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
-        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+        <DialogTitle m={0} p={2} id="customized-dialog-title">
           {title}
         </DialogTitle>
         <IconButton
@@ -54,10 +54,12 @@ const CardModalInfo = ({ title, description, altImg, img }: CardModalInfoProps) 
           <CloseIcon />
         </IconButton>
         <DialogContent dividers>
-          <Box sx={{width:"80%"}} m={"auto"}>
-            <img alt={altImg} src={img} loading="lazy" style={{height:300, objectFit:"cover", width:"100%"}}/>
+          <Box width={"80%"} m={"auto"}>
+            <img alt={altImg} src={img} loading="lazy" height={300} width={"100%"} style={{ objectFit: "cover" }} />
           </Box>
-          <Typography gutterBottom mx={1} my={3}>{description}</Typography>
+          <Typography gutterBottom mx={1} my={3}>
+            {description}
+          </Typography>
         </DialogContent>
       </BootstrapDialog>
     </>

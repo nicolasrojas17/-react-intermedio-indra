@@ -1,4 +1,5 @@
 import MailIcon from "@mui/icons-material/Mail";
+import { useState, useEffect } from "react";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Box } from "@mui/material";
@@ -7,9 +8,23 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import * as React from "react";
 import Notification from "./Notification";
+import { Product } from "../../App";
 
-const MoreInfo = () => {
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
+export type MoreInfoProps = {
+  shoppingCart: Product[];
+};
+
+const MoreInfo = ({ shoppingCart }: MoreInfoProps) => {
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState<null | HTMLElement>(null);
+  const [amountProducts, setAmountProducts] = useState(0);
+
+  useEffect(() => {
+    let amount = 0;
+    shoppingCart.forEach((product) => {
+      amount += product.amount;
+    });
+    setAmountProducts(amount);
+  }, [shoppingCart]);
 
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -25,34 +40,28 @@ const MoreInfo = () => {
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
       id={mobileMenuId}
       keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <Notification icon={<ShoppingCartIcon />} numberOfNotifications={17} text="Carrito de compras" />
+        <Notification icon={<ShoppingCartIcon />} numberOfNotifications={amountProducts} text="Carrito de compras" />
       </MenuItem>
       <MenuItem>
-        <Notification icon={<MailIcon />} numberOfNotifications={14} text="Mensajes" />
+        <Notification icon={<MailIcon />} numberOfNotifications={0} text="Mensajes" />
       </MenuItem>
     </Menu>
   );
   return (
     <div>
-      <Box sx={{ display: { xs: "none", md: "flex" } }}>
-        <Notification icon={<ShoppingCartIcon />} numberOfNotifications={17} />
-        <Notification icon={<MailIcon />} numberOfNotifications={14} />
+      <Box display={{ xs: "none", md: "flex" }}>
+        <Notification icon={<ShoppingCartIcon />} numberOfNotifications={amountProducts} />
+        <Notification icon={<MailIcon />} numberOfNotifications={0} />
       </Box>
-      <Box sx={{ display: { xs: "flex", md: "none" } }}>
+      <Box display={{ xs: "flex", md: "none" }}>
         <IconButton
           size="large"
           aria-label="show more"

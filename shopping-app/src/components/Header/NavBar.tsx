@@ -6,6 +6,7 @@ import MoreInfo from "./MoreInfo/MoreInfo";
 import NavListDrawer from "./NavListDrawer";
 import Search from "./Search/Search";
 import { useLocation } from "react-router-dom";
+import { Product } from "../App";
 
 export type MenuItem = {
   title: string;
@@ -15,9 +16,10 @@ export type MenuItem = {
 
 export type NavbarProps = {
   navLinks: MenuItem[];
+  shoppingCart: Product[];
 };
 
-const Navbar = ({ navLinks }: NavbarProps) => {
+const Navbar = ({ navLinks, shoppingCart }: NavbarProps) => {
   const [open, setOpen] = useState<boolean>(false);
 
   const [activePage, setActivePage] = useState("/");
@@ -26,20 +28,20 @@ const Navbar = ({ navLinks }: NavbarProps) => {
   useEffect(() => setOpen(false), [location]);
 
   return (
-    <>
+    <Box position="sticky" top={0} zIndex={100}>
       <AppBar position="static">
         <Container maxWidth="xl">
           <Toolbar>
-            <Box sx={{ display: { xs: "block", md: "none" } }}>
+            <Box display={{ xs: "block", md: "none" }}>
               <IconButton color="inherit" size="large" onClick={() => setOpen(true)}>
                 <MenuIcon />
               </IconButton>
             </Box>
-            <Typography variant="h6" sx={{ flexGrow: 1 }}>
+            <Typography variant="h6" flexGrow={1}>
               Curso React Intermedio
             </Typography>
             <Search />
-            <MoreInfo />
+            <MoreInfo   shoppingCart={shoppingCart}/>
           </Toolbar>
         </Container>
       </AppBar>
@@ -49,7 +51,7 @@ const Navbar = ({ navLinks }: NavbarProps) => {
       </Drawer>
 
       <Menu activePage={activePage} setActivePage={setActivePage} navLinks={navLinks} />
-    </>
+    </Box>
   );
 };
 

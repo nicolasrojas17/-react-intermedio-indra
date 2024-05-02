@@ -7,7 +7,7 @@ export type NavListDrawerProps = {
 };
 const NavListDrawer = ({ navLinks }: NavListDrawerProps) => {
   return (
-    <Box sx={{ width: 250 }} mt={8}>
+    <Box width={250} mt={8}>
       <nav>
         <List>
           {navLinks.map((link: MenuItem, index) => (
