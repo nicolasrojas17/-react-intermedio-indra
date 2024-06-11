@@ -12,13 +12,13 @@ const navLinks: MenuItem[] = [
   { title: "Profile", path: "/profile", icon: <PersonIcon /> },
 ];
 
-export interface Product {
+export interface ProductCart {
   idProduct: number;
   amount: number;
 }
 
 const App = () => {
-  const [shoppingCart, setShoppingCart] = useState<Product[]>([]);
+  const [shoppingCart, setShoppingCart] = useState<ProductCart[]>([]);
 
   return (
     <>

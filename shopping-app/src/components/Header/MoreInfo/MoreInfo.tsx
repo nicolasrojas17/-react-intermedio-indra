@@ -8,10 +8,11 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import * as React from "react";
 import Notification from "./Notification";
-import { Product } from "../../App";
+import { ProductCart } from "../../App";
+
 
 export type MoreInfoProps = {
-  shoppingCart: Product[];
+  shoppingCart: ProductCart[];
 };
 
 const MoreInfo = ({ shoppingCart }: MoreInfoProps) => {

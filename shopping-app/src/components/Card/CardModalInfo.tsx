@@ -1,46 +1,55 @@
+import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
+import RemoveIcon from "@mui/icons-material/Remove";
+import { Box, Button, Modal, Stack } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { styled } from "@mui/material/styles";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-import { useState } from "react";
-import { Box } from "@mui/material";
-
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  "& .MuiDialogContent-root": { padding: theme.spacing(2) },
-  "& .MuiDialogActions-root": { padding: theme.spacing(1) },
-}));
+import { Product } from "../../interfaces/Product";
+import { formatPrice } from "../../util/utils";
+import CardDiscount from "./CardDiscount";
 
 export type CardModalInfoProps = {
-  img: string;
+  product: Product;
   altImg: string;
-  title: string;
-  description: string;
+  amount: number;
+  openModalInfo: boolean;
+  handleAddToCart: () => void;
+  handleRemoveFromCart: () => void;
+  setOpenModalInfo: (open: boolean) => void;
 };
 
-const CardModalInfo = ({ title, description, altImg, img }: CardModalInfoProps) => {
-  const [open, setOpen] = useState(false);
+const CardModalInfo = (props: CardModalInfoProps) => {
+  const { product, altImg, amount, openModalInfo } = props;
+  const { handleAddToCart, handleRemoveFromCart, setOpenModalInfo } = props;
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleClose = () => setOpenModalInfo(false);
 
   return (
-    <>
-      <IconButton onClick={handleClickOpen}>
-        <RemoveRedEyeIcon color="primary" />
-      </IconButton>
+    <Modal
+      open={openModalInfo}
+      onClose={handleClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box
+        sx={{ transform: "translate(-50%, -50%)" }}
+        p={5}
+        width={{ xs: "90%", sm: "80%", md: "600px" }}
+        boxShadow={24}
+        borderRadius={2}
+        bgcolor={"background.paper"}
+        position={"absolute"}
+        top={"50%"}
+        left={"50%"}
+        display={{ xs: "block", md: "flex" }}
+        alignItems={"center"}
+      >
+        {product.discount > 0 && (
+          <Stack direction="row" width={100} position={"absolute"} top={"60px"}>
+            <CardDiscount discount={product.discount} color="success" />
+          </Stack>
+        )}
 
-      <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
-        <DialogTitle m={0} p={2} id="customized-dialog-title">
-          {title}
-        </DialogTitle>
         <IconButton
           aria-label="close"
           onClick={handleClose}
@@ -53,16 +62,48 @@ const CardModalInfo = ({ title, description, altImg, img }: CardModalInfoProps) 
         >
           <CloseIcon />
         </IconButton>
-        <DialogContent dividers>
-          <Box width={"80%"} m={"auto"}>
-            <img alt={altImg} src={img} loading="lazy" height={300} width={"100%"} style={{ objectFit: "cover" }} />
-          </Box>
-          <Typography gutterBottom mx={1} my={3}>
-            {description}
+        <Box width={{ xs: "100%", md: "50%" }} height={{ xs: "300px", md: "100%" }} mr={2}>
+          <img
+            alt={altImg}
+            src={product.image}
+            loading="lazy"
+            width={"100%"}
+            style={{ objectFit: "contain", height: "-webkit-fill-available" }}
+          />
+        </Box>
+        <Box width={{ xs: "100%", md: "50%" }} ml={2}>
+          <Typography variant="h5" fontWeight={"bold"} mx={1} my={3}>
+            {product.title}
           </Typography>
-        </DialogContent>
-      </BootstrapDialog>
-    </>
+          <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"} py={2}>
+            <Box>
+              {product.discount > 0 ? (
+                <>
+                  <Typography variant="h6" px={2}>{`$ ${formatPrice(product.priceDiscount)}`}</Typography>
+                  <Typography variant="body2" px={2} sx={{ textDecoration: "line-through" }}>{`$ ${formatPrice(
+                    product.price
+                  )}`}</Typography>
+                </>
+              ) : (
+                <Typography variant="h6" px={2}>{`$ ${formatPrice(product.priceDiscount)}`}</Typography>
+              )}
+            </Box>
+            <Box display={"flex"} alignItems={"center"} pr={2}>
+              <IconButton onClick={handleRemoveFromCart}>
+                <RemoveIcon color="inherit" />
+              </IconButton>
+              <Typography variant="body1">{amount}</Typography>
+              <IconButton onClick={handleAddToCart}>
+                <AddIcon color="inherit" />
+              </IconButton>
+            </Box>
+          </Box>
+          <Button sx={{ width: "100%", my: 2 }} variant="outlined" onClick={handleAddToCart}>
+            Add to cart
+          </Button>
+        </Box>
+      </Box>
+    </Modal>
   );
 };
 

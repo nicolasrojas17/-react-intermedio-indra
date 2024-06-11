@@ -2,21 +2,14 @@ import { Box, Rating, Typography } from "@mui/material";
 
 export type CardRatingProps = {
   rating: number;
-  setRating: (rating: number) => void;
+  reviews: number;
 };
 
-const CardRating = ({ rating, setRating }: CardRatingProps) => {
+const CardRating = ({ rating, reviews = 0 }: CardRatingProps) => {
   return (
-    <Box px={2}>
-      <Typography component="legend">Calificación</Typography>
-      <Rating
-        name="simple-controlled"
-        value={rating}
-        precision={0.5}
-        onChange={(_, newValue) => {
-          setRating(newValue ?? 0);
-        }}
-      />
+    <Box px={2} mb={2} display="flex" alignItems="center" justifyContent={"center"} width={"100%"}>
+      <Rating name="read-only" value={rating} precision={0.5} readOnly />
+      <Typography ml={2} variant="caption">{` (${reviews} reviews) `}</Typography>
     </Box>
   );
 };

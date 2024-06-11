@@ -6,7 +6,7 @@ import MoreInfo from "./MoreInfo/MoreInfo";
 import NavListDrawer from "./NavListDrawer";
 import Search from "./Search/Search";
 import { useLocation } from "react-router-dom";
-import { Product } from "../App";
+import { ProductCart } from "../App";
 
 export type MenuItem = {
   title: string;
@@ -16,7 +16,7 @@ export type MenuItem = {
 
 export type NavbarProps = {
   navLinks: MenuItem[];
-  shoppingCart: Product[];
+  shoppingCart: ProductCart[];
 };
 
 const Navbar = ({ navLinks, shoppingCart }: NavbarProps) => {
