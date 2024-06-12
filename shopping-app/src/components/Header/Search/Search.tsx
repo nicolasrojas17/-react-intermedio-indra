@@ -60,7 +60,7 @@ const Search = ({ search, setSearch }: SearchProps) => {
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
-    const newPathName = search === "" ? window.location.pathname : `?search=${e.target.value}`;
+    const newPathName = search === "" ? window.location.pathname : `?q=${e.target.value}`;
     window.history.pushState({}, "", newPathName);
   };
 

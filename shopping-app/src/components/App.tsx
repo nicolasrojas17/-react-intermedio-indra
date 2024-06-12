@@ -28,7 +28,7 @@ const App = () => {
 
   const [search, setSearch] = useState<string>(() => {
     const searchParams = new URLSearchParams(window.location.search);
-    return searchParams.get("search") ?? "";
+    return searchParams.get("q") ?? "";
   });
 
   const fetchProducts = useCallback(async () => {
