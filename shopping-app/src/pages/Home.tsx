@@ -1,4 +1,4 @@
-import { Box, Chip, Grid } from "@mui/material";
+import { Box, Chip, Grid, Typography } from "@mui/material";
 import { ProductCart } from "../components/App";
 import CardItem from "../components/Card/CardItem";
 import { Product } from "../interfaces/Product";
@@ -62,6 +62,11 @@ const Home = (props: HomeProps) => {
                 setShoppingCart={setShoppingCart}
               />,
             ])}
+        {products.length === 0 && (
+          <Typography variant="h5" component="h5">
+            No products
+          </Typography>
+        )}
       </Grid>
     </>
   );
