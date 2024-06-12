@@ -10,7 +10,7 @@ import { getProducts } from "../services/productService";
 import Navbar, { MenuItem } from "./Header/NavBar";
 
 const navLinks: MenuItem[] = [
-  { title: "Home", path: "/home", icon: <HomeIcon /> },
+  { title: "Home", path: "/", icon: <HomeIcon /> },
   { title: "Cart", path: "/cart", icon: <PersonIcon /> },
 ];
 
@@ -38,6 +38,12 @@ const App = () => {
     await getProducts(setProducts, setIsLoading);
   }, []);
 
+  const handleRemoveCategory = () => setCategory("");
+  const handleRemoveSearch = () => {
+    setSearch("");
+    window.history.pushState({}, "", window.location.pathname);
+  };
+
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
@@ -51,12 +57,11 @@ const App = () => {
   }, [products]);
 
   useEffect(() => {
-    setProductsFiltered(products.filter((product) => product.title.toLowerCase().includes(search.toLowerCase())));
-  }, [search, products]);
-
-  useEffect(() => {
-    setProductsFiltered(products.filter((product) => (category === "" ? true : product.category === category)));
-  }, [category, products]);
+    let filtered = products;
+    if (category) filtered = filtered.filter((product) => product.category === category);
+    if (search) filtered = filtered.filter((product) => product.title.toLowerCase().includes(search.toLowerCase()));
+    setProductsFiltered(filtered);
+  }, [category, products, search]);
 
   return (
     <>
@@ -74,6 +79,9 @@ const App = () => {
                 categories={categories}
                 category={category}
                 setCategory={setCategory}
+                search={search}
+                handleRemoveCategory={handleRemoveCategory}
+                handleRemoveSearch={handleRemoveSearch}
               />
             }
           />
@@ -88,6 +96,9 @@ const App = () => {
                 categories={categories}
                 category={category}
                 setCategory={setCategory}
+                search={search}
+                handleRemoveCategory={handleRemoveCategory}
+                handleRemoveSearch={handleRemoveSearch}
               />
             }
           />

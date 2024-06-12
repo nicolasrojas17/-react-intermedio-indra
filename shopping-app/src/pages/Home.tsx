@@ -1,27 +1,46 @@
-import { Box, Grid } from "@mui/material";
+import { Box, Chip, Grid } from "@mui/material";
 import { ProductCart } from "../components/App";
 import CardItem from "../components/Card/CardItem";
 import { Product } from "../interfaces/Product";
 import Category from "../components/Header/Category/Category";
+import Stack from "@mui/material/Stack";
 
 export type HomeProps = {
   shoppingCart: ProductCart[];
-  setShoppingCart: (value: ProductCart[]) => void;
   products: Product[];
   isLoading: boolean;
   categories: string[];
   category: string;
+  search: string;
+  setShoppingCart: (value: ProductCart[]) => void;
   setCategory: (value: string) => void;
+  handleRemoveCategory: () => void;
+  handleRemoveSearch: () => void;
 };
 
-const Home = ({ setShoppingCart, shoppingCart, isLoading, products, categories, category, setCategory }: HomeProps) => {
+const Home = (props: HomeProps) => {
+  const { shoppingCart, isLoading, products, categories, category, search } = props;
+  const { setShoppingCart, setCategory, handleRemoveCategory, handleRemoveSearch } = props;
+
   return (
     <>
-      <Box display={"flex"} justifyContent={"end"} mr={3} mt={3}>
+      <Box
+        display={"flex"}
+        justifyContent={"end"}
+        flexDirection={{ xs: "column-reverse", md: "row" }}
+        alignItems={"center"}
+        width={"100%"}
+        mr={3}
+        mt={3}
+      >
+        <Stack direction="row" flexWrap={"wrap"} justifyContent={"center"} spacing={1}>
+          {search && <Chip label={`Search: ${search}`} variant="outlined" onDelete={handleRemoveSearch} />}
+          {category && <Chip label={`Category: ${category}`} variant="outlined" onDelete={handleRemoveCategory} />}
+        </Stack>
         <Category categories={categories} category={category} setCategory={setCategory} />
       </Box>
 
-      <Grid container maxWidth={"xl"} spacing={2} mb={5}>
+      <Grid container maxWidth={"xl"} spacing={2} mb={5} justifyContent={"center"}>
         {isLoading
           ? Array.from(new Array(12)).map((_, index) => [
               <CardItem
