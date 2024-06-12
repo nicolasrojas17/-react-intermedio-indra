@@ -6,21 +6,23 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { Product } from "../../interfaces/Product";
 import { formatPrice } from "../../util/utils";
-import CardDiscount from "./CardDiscount";
+import ChipItem from "../Chip/ChipItem";
 
 export type CardModalInfoProps = {
   product: Product;
   altImg: string;
-  amount: number;
+  productInCart: number;
   openModalInfo: boolean;
+  amountProductsToAddCart: number;
+  handleAddProductsAmount: () => void;
+  handleRemoveProductsAmount: () => void;
   handleAddToCart: () => void;
-  handleRemoveFromCart: () => void;
   setOpenModalInfo: (open: boolean) => void;
 };
 
 const CardModalInfo = (props: CardModalInfoProps) => {
-  const { product, altImg, amount, openModalInfo } = props;
-  const { handleAddToCart, handleRemoveFromCart, setOpenModalInfo } = props;
+  const { product, altImg, openModalInfo, productInCart, amountProductsToAddCart } = props;
+  const { handleAddProductsAmount, handleRemoveProductsAmount, handleAddToCart, setOpenModalInfo } = props;
 
   const handleClose = () => setOpenModalInfo(false);
 
@@ -34,7 +36,7 @@ const CardModalInfo = (props: CardModalInfoProps) => {
       <Box
         sx={{ transform: "translate(-50%, -50%)" }}
         p={5}
-        width={{ xs: "90%", sm: "80%", md: "600px" }}
+        width={{ xs: "90%", sm: "80%", md: "700px" }}
         boxShadow={24}
         borderRadius={2}
         bgcolor={"background.paper"}
@@ -44,9 +46,9 @@ const CardModalInfo = (props: CardModalInfoProps) => {
         display={{ xs: "block", md: "flex" }}
         alignItems={"center"}
       >
-        {product.discount > 0 && (
+        {productInCart > 0 && (
           <Stack direction="row" width={100} position={"absolute"} top={"60px"}>
-            <CardDiscount discount={product.discount} color="success" />
+            <ChipItem text={`${productInCart} in cart`} color="success" />
           </Stack>
         )}
 
@@ -79,7 +81,10 @@ const CardModalInfo = (props: CardModalInfoProps) => {
             <Box>
               {product.discount > 0 ? (
                 <>
-                  <Typography variant="h6" px={2}>{`$ ${formatPrice(product.priceDiscount)}`}</Typography>
+                  <Box display={"flex"} alignItems={"center"}>
+                    <Typography variant="subtitle1" pl={2} pr={1} color={"error"}>{`-${product.discount}%`}</Typography>
+                    <Typography variant="h6">{`$ ${formatPrice(product.priceDiscount)}`}</Typography>
+                  </Box>
                   <Typography variant="body2" px={2} sx={{ textDecoration: "line-through" }}>{`$ ${formatPrice(
                     product.price
                   )}`}</Typography>
@@ -89,11 +94,11 @@ const CardModalInfo = (props: CardModalInfoProps) => {
               )}
             </Box>
             <Box display={"flex"} alignItems={"center"} pr={2}>
-              <IconButton onClick={handleRemoveFromCart}>
+              <IconButton onClick={handleRemoveProductsAmount}>
                 <RemoveIcon color="inherit" />
               </IconButton>
-              <Typography variant="body1">{amount}</Typography>
-              <IconButton onClick={handleAddToCart}>
+              <Typography variant="body1">{amountProductsToAddCart}</Typography>
+              <IconButton onClick={handleAddProductsAmount}>
                 <AddIcon color="inherit" />
               </IconButton>
             </Box>

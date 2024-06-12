@@ -6,10 +6,10 @@ import { useEffect, useState } from "react";
 import { Product } from "../../interfaces/Product";
 import { formatPrice } from "../../util/utils";
 import { ProductCart } from "../App";
-import CardDiscount from "./CardDiscount";
 import CardItemSkeleton from "./CardItemSkeleton";
 import CardModalInfo from "./CardModalInfo";
 import CardRating from "./CardRating";
+import ChipItem from "../Chip/ChipItem";
 
 export type CardItemProps = {
   product: Product;
@@ -22,21 +22,29 @@ export type CardItemProps = {
 const CardItem = ({ product, altImg, isLoading, shoppingCart, setShoppingCart }: CardItemProps) => {
   const [productItem, setProductItem] = useState<ProductCart>();
   const [openModalInfo, setOpenModalInfo] = useState<boolean>(false);
+  const [productInCart, setProductInCart] = useState<number>(0);
+  const [amountProductsToAddCart, setAmountProductsToAddCart] = useState<number>(1);
 
   const handleOpen = () => setOpenModalInfo(true);
+
+  const handleResetAmountProducts = () => setAmountProductsToAddCart(1);
 
   const handleAddToCart = () => {
     if (shoppingCart && setShoppingCart && product.id) {
       const productFind = shoppingCart.find((item) => item.idProduct === product.id);
       if (!productFind) {
-        setShoppingCart([...shoppingCart, { idProduct: product.id, amount: 1 }]);
+        setShoppingCart([...shoppingCart, { idProduct: product.id, amount: amountProductsToAddCart }]);
+        handleResetAmountProducts();
         return;
       }
       setShoppingCart(
         shoppingCart.map((item) => {
-          return item.idProduct === product.id ? { ...item, amount: productFind.amount ? productFind.amount + 1 : 1 } : item;
+          return item.idProduct === product.id
+            ? { ...item, amount: productFind.amount ? productFind.amount + amountProductsToAddCart : amountProductsToAddCart }
+            : item;
         })
       );
+      handleResetAmountProducts();
     }
   };
 
@@ -57,6 +65,18 @@ const CardItem = ({ product, altImg, isLoading, shoppingCart, setShoppingCart }:
       );
     }
   };
+  const handleRemoveProductsAmount = () => {
+    if (amountProductsToAddCart === 1) return;
+    setAmountProductsToAddCart(amountProductsToAddCart - 1);
+  };
+
+  const handleAddProductsAmount = () => {
+    setAmountProductsToAddCart(amountProductsToAddCart + 1);
+  };
+
+  useEffect(() => {
+    setProductInCart(productItem?.amount ?? 0);
+  }, [productItem]);
 
   useEffect(() => {
     setProductItem(shoppingCart?.find((item) => item.idProduct === product.id));
@@ -78,9 +98,9 @@ const CardItem = ({ product, altImg, isLoading, shoppingCart, setShoppingCart }:
               ":hover": { boxShadow: 6 },
             }}
           >
-            {product.discount > 0 && (
+            {productInCart > 0 && (
               <Stack direction="row" m={2} position={"absolute"}>
-                <CardDiscount discount={product.discount} color="success" />
+                <ChipItem text={`${productInCart} in cart`} color="success" />
               </Stack>
             )}
 
@@ -112,7 +132,10 @@ const CardItem = ({ product, altImg, isLoading, shoppingCart, setShoppingCart }:
               <Box>
                 {product.discount > 0 ? (
                   <>
-                    <Typography variant="h6" px={2}>{`$ ${formatPrice(product.priceDiscount)}`}</Typography>
+                    <Box display={"flex"} alignItems={"center"}>
+                      <Typography variant="subtitle1" pl={2} pr={1} color={"error"}>{`-${product.discount}%`}</Typography>
+                      <Typography variant="h6">{`$ ${formatPrice(product.priceDiscount)}`}</Typography>
+                    </Box>
                     <Typography variant="body2" px={2} sx={{ textDecoration: "line-through" }}>{`$ ${formatPrice(
                       product.price
                     )}`}</Typography>
@@ -121,17 +144,16 @@ const CardItem = ({ product, altImg, isLoading, shoppingCart, setShoppingCart }:
                   <Typography variant="h6" px={2}>{`$ ${formatPrice(product.priceDiscount)}`}</Typography>
                 )}
               </Box>
-              {productItem && (
-                <Box display={"flex"} alignItems={"center"} pr={2}>
-                  <IconButton onClick={handleRemoveFromCart}>
-                    <RemoveIcon color="inherit" />
-                  </IconButton>
-                  <Typography variant="body1">{productItem.amount}</Typography>
-                  <IconButton onClick={handleAddToCart}>
-                    <AddIcon color="inherit" />
-                  </IconButton>
-                </Box>
-              )}
+
+              <Box display={"flex"} alignItems={"center"} pr={2}>
+                <IconButton onClick={handleRemoveProductsAmount} disabled={amountProductsToAddCart <= 1}>
+                  <RemoveIcon color="inherit" />
+                </IconButton>
+                <Typography variant="body1">{amountProductsToAddCart}</Typography>
+                <IconButton onClick={handleAddProductsAmount}>
+                  <AddIcon color="inherit" />
+                </IconButton>
+              </Box>
             </Box>
 
             <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"}>
@@ -141,8 +163,10 @@ const CardItem = ({ product, altImg, isLoading, shoppingCart, setShoppingCart }:
                   product={product}
                   altImg={altImg}
                   handleAddToCart={handleAddToCart}
-                  handleRemoveFromCart={handleRemoveFromCart}
-                  amount={productItem?.amount ?? 0}
+                  handleAddProductsAmount={handleAddProductsAmount}
+                  handleRemoveProductsAmount={handleRemoveProductsAmount}
+                  amountProductsToAddCart={amountProductsToAddCart}
+                  productInCart={productInCart}
                   openModalInfo={openModalInfo}
                   setOpenModalInfo={setOpenModalInfo}
                 />

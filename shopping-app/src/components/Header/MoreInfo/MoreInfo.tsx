@@ -20,11 +20,7 @@ const MoreInfo = ({ shoppingCart }: MoreInfoProps) => {
   const [amountProducts, setAmountProducts] = useState(0);
 
   useEffect(() => {
-    let amount = 0;
-    shoppingCart.forEach((product) => {
-      amount += product.amount;
-    });
-    setAmountProducts(amount);
+    setAmountProducts(shoppingCart.length);
   }, [shoppingCart]);
 
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);

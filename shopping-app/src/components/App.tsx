@@ -9,7 +9,7 @@ import { useState } from "react";
 
 const navLinks: MenuItem[] = [
   { title: "Home", path: "/", icon: <HomeIcon /> },
-  { title: "Profile", path: "/profile", icon: <PersonIcon /> },
+  { title: "Cart", path: "/cart", icon: <PersonIcon /> },
 ];
 
 export interface ProductCart {
@@ -27,7 +27,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} />} />
           <Route path="/home" element={<Home shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/cart" element={<Profile />} />
         </Routes>
       </Container>
     </>
