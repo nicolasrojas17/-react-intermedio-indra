@@ -29,10 +29,8 @@ const Cart = ({ cartProducts, handleRemoveAllItemsCart, handleAddProductToCart, 
             <TableCell align="right">Product</TableCell>
             <TableCell align="center">Quantity</TableCell>
             <TableCell align="center">Price</TableCell>
-            <TableCell sx={{ minWidth: "150px" }} align="center">
-              Total
-            </TableCell>
-            <TableCell sx={{ minWidth: "150px" }}></TableCell>
+            <TableCell align="center">Total</TableCell>
+            <TableCell></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
