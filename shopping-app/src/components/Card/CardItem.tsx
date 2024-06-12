@@ -6,10 +6,10 @@ import { useEffect, useState } from "react";
 import { Product } from "../../interfaces/Product";
 import { formatPrice } from "../../util/utils";
 import { ProductCart } from "../App";
+import ChipItem from "../Chip/ChipItem";
 import CardItemSkeleton from "./CardItemSkeleton";
 import CardModalInfo from "./CardModalInfo";
 import CardRating from "./CardRating";
-import ChipItem from "../Chip/ChipItem";
 
 export type CardItemProps = {
   product: Product;
@@ -48,23 +48,6 @@ const CardItem = ({ product, altImg, isLoading, shoppingCart, setShoppingCart }:
     }
   };
 
-  const handleRemoveFromCart = () => {
-    if (shoppingCart && setShoppingCart && product.id) {
-      const productFind = shoppingCart.find((item) => item.idProduct === product.id);
-      if (!productFind) {
-        return;
-      }
-      if (productFind.amount === 1) {
-        setShoppingCart(shoppingCart.filter((item) => item.idProduct !== product.id));
-        return;
-      }
-      setShoppingCart(
-        shoppingCart.map((item) => {
-          return item.idProduct === product.id ? { ...item, amount: productFind.amount ? productFind.amount - 1 : 0 } : item;
-        })
-      );
-    }
-  };
   const handleRemoveProductsAmount = () => {
     if (amountProductsToAddCart === 1) return;
     setAmountProductsToAddCart(amountProductsToAddCart - 1);
