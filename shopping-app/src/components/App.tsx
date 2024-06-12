@@ -10,7 +10,7 @@ import { getProducts } from "../services/productService";
 import Navbar, { MenuItem } from "./Header/NavBar";
 
 const navLinks: MenuItem[] = [
-  { title: "Home", path: "/", icon: <HomeIcon /> },
+  { title: "Home", path: "/home", icon: <HomeIcon /> },
   { title: "Cart", path: "/cart", icon: <PersonIcon /> },
 ];
 
@@ -24,7 +24,10 @@ const App = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+
   const [productsFiltered, setProductsFiltered] = useState<Product[]>(products);
+  const [category, setCategory] = useState<string>("");
 
   const [search, setSearch] = useState<string>(() => {
     const searchParams = new URLSearchParams(window.location.search);
@@ -40,9 +43,20 @@ const App = () => {
   }, [fetchProducts]);
 
   useEffect(() => setProductsFiltered(products), [products]);
+
+  useEffect(() => {
+    const categoriesSearch = products.map((product) => product.category);
+    const uniqueCategories = [...new Set(categoriesSearch)];
+    setCategories(uniqueCategories);
+  }, [products]);
+
   useEffect(() => {
     setProductsFiltered(products.filter((product) => product.title.toLowerCase().includes(search.toLowerCase())));
   }, [search, products]);
+
+  useEffect(() => {
+    setProductsFiltered(products.filter((product) => (category === "" ? true : product.category === category)));
+  }, [category, products]);
 
   return (
     <>
@@ -57,6 +71,9 @@ const App = () => {
                 setShoppingCart={setShoppingCart}
                 isLoading={isLoading}
                 products={productsFiltered}
+                categories={categories}
+                category={category}
+                setCategory={setCategory}
               />
             }
           />
@@ -68,6 +85,9 @@ const App = () => {
                 setShoppingCart={setShoppingCart}
                 isLoading={isLoading}
                 products={productsFiltered}
+                categories={categories}
+                category={category}
+                setCategory={setCategory}
               />
             }
           />
