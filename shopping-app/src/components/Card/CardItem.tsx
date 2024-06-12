@@ -31,15 +31,15 @@ const CardItem = ({ product, altImg, isLoading, shoppingCart, setShoppingCart }:
 
   const handleAddToCart = () => {
     if (shoppingCart && setShoppingCart && product.id) {
-      const productFind = shoppingCart.find((item) => item.idProduct === product.id);
+      const productFind = shoppingCart.find((item) => item.product.id === product.id);
       if (!productFind) {
-        setShoppingCart([...shoppingCart, { idProduct: product.id, amount: amountProductsToAddCart }]);
+        setShoppingCart([...shoppingCart, { product, amount: amountProductsToAddCart }]);
         handleResetAmountProducts();
         return;
       }
       setShoppingCart(
         shoppingCart.map((item) => {
-          return item.idProduct === product.id
+          return item.product.id === product.id
             ? { ...item, amount: productFind.amount ? productFind.amount + amountProductsToAddCart : amountProductsToAddCart }
             : item;
         })
@@ -47,7 +47,7 @@ const CardItem = ({ product, altImg, isLoading, shoppingCart, setShoppingCart }:
       handleResetAmountProducts();
     }
   };
-/*
+  /*
   const handleRemoveFromCart = () => {
     if (shoppingCart && setShoppingCart && product.id) {
       const productFind = shoppingCart.find((item) => item.idProduct === product.id);
@@ -65,7 +65,8 @@ const CardItem = ({ product, altImg, isLoading, shoppingCart, setShoppingCart }:
       );
     }
   };
-  */const handleRemoveProductsAmount = () => {
+  */ 
+ const handleRemoveProductsAmount = () => {
     if (amountProductsToAddCart === 1) return;
     setAmountProductsToAddCart(amountProductsToAddCart - 1);
   };
@@ -79,7 +80,7 @@ const CardItem = ({ product, altImg, isLoading, shoppingCart, setShoppingCart }:
   }, [productItem]);
 
   useEffect(() => {
-    setProductItem(shoppingCart?.find((item) => item.idProduct === product.id));
+    setProductItem(shoppingCart?.find((item) => item.product.id === product.id));
   }, [shoppingCart, product]);
 
   return (

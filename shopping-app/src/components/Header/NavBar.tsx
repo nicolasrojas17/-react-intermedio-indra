@@ -7,6 +7,8 @@ import NavListDrawer from "./NavListDrawer";
 import Search from "./Search/Search";
 import { useLocation } from "react-router-dom";
 import { ProductCart } from "../App";
+import Cart from "../Cart/Cart";
+import { Product } from "../../interfaces/Product";
 
 export type MenuItem = {
   title: string;
@@ -18,11 +20,25 @@ export type NavbarProps = {
   navLinks: MenuItem[];
   shoppingCart: ProductCart[];
   search: string;
+  cartProducts: ProductCart[];
   setSearch: (search: string) => void;
+  handleRemoveAllItemsCart: (value: number) => void;
+  handleAddProductToCart: (product: Product, amount: number) => void;
+  handleRemoveProductFromCart: (productId: number) => void;
 };
 
-const Navbar = ({ navLinks, shoppingCart, search, setSearch }: NavbarProps) => {
+const Navbar = ({
+  navLinks,
+  shoppingCart,
+  search,
+  cartProducts,
+  setSearch,
+  handleRemoveAllItemsCart,
+  handleAddProductToCart,
+  handleRemoveProductFromCart,
+}: NavbarProps) => {
   const [open, setOpen] = useState<boolean>(false);
+  const [cartOpen, setCartOpen] = useState<boolean>(false);
 
   const [activePage, setActivePage] = useState("/");
   const location = useLocation();
@@ -41,10 +57,19 @@ const Navbar = ({ navLinks, shoppingCart, search, setSearch }: NavbarProps) => {
             </Box>
             <Typography variant="h6">Curso React Intermedio</Typography>
             <Search search={search} setSearch={setSearch} />
-            <MoreInfo shoppingCart={shoppingCart} />
+            <MoreInfo shoppingCart={shoppingCart} setCartOpen={setCartOpen} />
           </Toolbar>
         </Container>
       </AppBar>
+
+      <Drawer anchor="right" open={cartOpen} onClose={() => setCartOpen(false)}>
+        <Cart
+          cartProducts={cartProducts}
+          handleRemoveAllItemsCart={handleRemoveAllItemsCart}
+          handleAddProductToCart={handleAddProductToCart}
+          handleRemoveProductFromCart={handleRemoveProductFromCart}
+        />
+      </Drawer>
 
       <Drawer sx={{ display: { xs: "block", md: "none" } }} open={open} anchor="left" onClose={() => setOpen(false)}>
         <NavListDrawer navLinks={navLinks} />

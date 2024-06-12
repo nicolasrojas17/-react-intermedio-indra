@@ -4,11 +4,13 @@ import { ReactElement } from "react";
 export type NotificationProps = {
   icon: ReactElement;
   numberOfNotifications: number;
+  onclick?: () => void;
   text?: string;
 };
-const Notification = ({ icon, numberOfNotifications, text }: NotificationProps) => {
+
+const Notification = ({ icon, numberOfNotifications, text, onclick }: NotificationProps) => {
   return (
-    <Box>
+    <Box onClick={onclick}>
       <IconButton size="large" aria-label={`show ${numberOfNotifications} new notifications`} color="inherit">
         <Badge badgeContent={numberOfNotifications} color="error">
           {icon}

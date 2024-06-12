@@ -12,9 +12,10 @@ import Notification from "./Notification";
 
 export type MoreInfoProps = {
   shoppingCart: ProductCart[];
+  setCartOpen: (open: boolean) => void;
 };
 
-const MoreInfo = ({ shoppingCart }: MoreInfoProps) => {
+const MoreInfo = ({ shoppingCart, setCartOpen }: MoreInfoProps) => {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState<null | HTMLElement>(null);
   const [amountProducts, setAmountProducts] = useState(0);
 
@@ -47,7 +48,12 @@ const MoreInfo = ({ shoppingCart }: MoreInfoProps) => {
         <Notification icon={<AccountCircleIcon />} numberOfNotifications={0} text="Perfil" />
       </MenuItem>
       <MenuItem>
-        <Notification icon={<ShoppingCartIcon />} numberOfNotifications={amountProducts} text="Carrito de compras" />
+        <Notification
+          icon={<ShoppingCartIcon />}
+          numberOfNotifications={amountProducts}
+          text="Carrito de compras"
+          onclick={() => setCartOpen(true)}
+        />
       </MenuItem>
     </Menu>
   );
@@ -55,7 +61,7 @@ const MoreInfo = ({ shoppingCart }: MoreInfoProps) => {
     <div>
       <Box display={{ xs: "none", md: "flex" }}>
         <Notification icon={<AccountCircleIcon />} numberOfNotifications={0} />
-        <Notification icon={<ShoppingCartIcon />} numberOfNotifications={amountProducts} />
+        <Notification icon={<ShoppingCartIcon />} numberOfNotifications={amountProducts} onclick={() => setCartOpen(true)} />
       </Box>
       <Box display={{ xs: "flex", md: "none" }}>
         <IconButton

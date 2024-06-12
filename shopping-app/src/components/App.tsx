@@ -15,7 +15,7 @@ const navLinks: MenuItem[] = [
 ];
 
 export interface ProductCart {
-  idProduct: number;
+  product: Product;
   amount: number;
 }
 
@@ -44,6 +44,42 @@ const App = () => {
     window.history.pushState({}, "", window.location.pathname);
   };
 
+  const handleRemoveAllItemsCart = (productId: number) => {
+    setShoppingCart(shoppingCart.filter((item) => item.product.id !== productId));
+    return;
+  };
+
+  const handleAddProductToCart = (product: Product, amount: number) => {
+    const productFind = shoppingCart.find((item) => item.product.id === product.id);
+    if (!productFind) {
+      setShoppingCart([...shoppingCart, { product, amount }]);
+      return;
+    }
+    setShoppingCart(
+      shoppingCart.map((item) => {
+        return item.product.id === product.id
+          ? { ...item, amount: productFind.amount ? productFind.amount + amount : amount }
+          : item;
+      })
+    );
+  };
+
+  const handleRemoveProductFromCart = (productId: number) => {
+    const productFind = shoppingCart.find((item) => item.product.id === productId);
+    if (!productFind) {
+      return;
+    }
+    if (productFind.amount === 1) {
+      setShoppingCart(shoppingCart.filter((item) => item.product.id !== productId));
+      return;
+    }
+    setShoppingCart(
+      shoppingCart.map((item) => {
+        return item.product.id === productId ? { ...item, amount: productFind.amount ? productFind.amount - 1 : 0 } : item;
+      })
+    );
+  };
+
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
@@ -65,7 +101,16 @@ const App = () => {
 
   return (
     <>
-      <Navbar navLinks={navLinks} shoppingCart={shoppingCart} search={search} setSearch={setSearch} />
+      <Navbar
+        navLinks={navLinks}
+        shoppingCart={shoppingCart}
+        search={search}
+        setSearch={setSearch}
+        cartProducts={shoppingCart}
+        handleRemoveAllItemsCart={handleRemoveAllItemsCart}
+        handleAddProductToCart={handleAddProductToCart}
+        handleRemoveProductFromCart={handleRemoveProductFromCart}
+      />
       <Container maxWidth={"xl"}>
         <Routes>
           <Route
