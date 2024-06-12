@@ -1,7 +1,7 @@
 import MoreIcon from "@mui/icons-material/MoreVert";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { Box } from "@mui/material";
+import { Badge, Box } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -44,25 +44,22 @@ const MoreInfo = ({ shoppingCart, setCartOpen }: MoreInfoProps) => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
+      <MenuItem sx={{ minWidth: 200 }}>
         <Notification icon={<AccountCircleIcon />} numberOfNotifications={0} text="Perfil" />
-      </MenuItem>
-      <MenuItem>
-        <Notification
-          icon={<ShoppingCartIcon />}
-          numberOfNotifications={amountProducts}
-          text="Carrito de compras"
-          onclick={() => setCartOpen(true)}
-        />
       </MenuItem>
     </Menu>
   );
   return (
-    <div>
+    <Box display={"flex"}>
       <Box display={{ xs: "none", md: "flex" }}>
         <Notification icon={<AccountCircleIcon />} numberOfNotifications={0} />
         <Notification icon={<ShoppingCartIcon />} numberOfNotifications={amountProducts} onclick={() => setCartOpen(true)} />
       </Box>
+      <IconButton sx={{ display: { xs: "flex", md: "none" } }} color="secondary" onClick={() => setCartOpen(true)}>
+        <Badge badgeContent={amountProducts} color="error">
+          <ShoppingCartIcon />
+        </Badge>
+      </IconButton>
       <Box display={{ xs: "flex", md: "none" }}>
         <IconButton
           size="large"
@@ -76,7 +73,7 @@ const MoreInfo = ({ shoppingCart, setCartOpen }: MoreInfoProps) => {
         </IconButton>
       </Box>
       {renderMobileMenu}
-    </div>
+    </Box>
   );
 };
 

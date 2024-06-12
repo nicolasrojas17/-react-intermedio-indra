@@ -47,26 +47,8 @@ const CardItem = ({ product, altImg, isLoading, shoppingCart, setShoppingCart }:
       handleResetAmountProducts();
     }
   };
-  /*
-  const handleRemoveFromCart = () => {
-    if (shoppingCart && setShoppingCart && product.id) {
-      const productFind = shoppingCart.find((item) => item.idProduct === product.id);
-      if (!productFind) {
-        return;
-      }
-      if (productFind.amount === 1) {
-        setShoppingCart(shoppingCart.filter((item) => item.idProduct !== product.id));
-        return;
-      }
-      setShoppingCart(
-        shoppingCart.map((item) => {
-          return item.idProduct === product.id ? { ...item, amount: productFind.amount ? productFind.amount - 1 : 0 } : item;
-        })
-      );
-    }
-  };
-  */ 
- const handleRemoveProductsAmount = () => {
+
+  const handleRemoveProductsAmount = () => {
     if (amountProductsToAddCart === 1) return;
     setAmountProductsToAddCart(amountProductsToAddCart - 1);
   };
@@ -88,7 +70,7 @@ const CardItem = ({ product, altImg, isLoading, shoppingCart, setShoppingCart }:
       {isLoading ? (
         <CardItemSkeleton />
       ) : (
-        <Grid item xs={12} sm={6} md={4} lg={3} px={2} mt={2}>
+        <Grid item xs={12} sm={6} md={4} lg={3} px={2} mt={2} pr={0}>
           <Card
             sx={{
               height: "100%",

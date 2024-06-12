@@ -1,14 +1,15 @@
+import CloseIcon from "@mui/icons-material/Close";
 import MenuIcon from "@mui/icons-material/Menu";
 import { AppBar, Box, Container, Drawer, IconButton, Toolbar, Typography } from "@mui/material";
 import { ReactElement, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { Product } from "../../interfaces/Product";
+import { ProductCart } from "../App";
+import Cart from "../Cart/Cart";
 import Menu from "./Menu";
 import MoreInfo from "./MoreInfo/MoreInfo";
 import NavListDrawer from "./NavListDrawer";
 import Search from "./Search/Search";
-import { useLocation } from "react-router-dom";
-import { ProductCart } from "../App";
-import Cart from "../Cart/Cart";
-import { Product } from "../../interfaces/Product";
 
 export type MenuItem = {
   title: string;
@@ -62,7 +63,14 @@ const Navbar = ({
         </Container>
       </AppBar>
 
-      <Drawer anchor="right" open={cartOpen} onClose={() => setCartOpen(false)}>
+      <Drawer anchor="right" open={cartOpen} onClose={() => setCartOpen(false)} PaperProps={{ sx: { width: {xs:"100%", md: "inherit" } } }}>
+        <IconButton
+          sx={{ position: "absolute", top: 0, right: 0, margin: 1, marginRight: 3, zIndex: 1 }}
+          onClick={() => setCartOpen(false)}
+        >
+          <CloseIcon />
+        </IconButton>
+
         <Cart
           cartProducts={cartProducts}
           handleRemoveAllItemsCart={handleRemoveAllItemsCart}
