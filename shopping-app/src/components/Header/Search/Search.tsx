@@ -50,19 +50,37 @@ const StyledInputBaseMobile = styled(InputBase)(({ theme }) => ({
   margin: "25px 5px",
 }));
 
-const Search = () => {
+export type SearchProps = {
+  search: string;
+  setSearch: (search: string) => void;
+};
+
+const Search = ({ search, setSearch }: SearchProps) => {
   const [open, setOpen] = useState(false);
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+    const newPathName = search === "" ? window.location.pathname : `?search=${e.target.value}`;
+    window.history.pushState({}, "", newPathName);
+  };
+
   return (
     <>
       <IconButton sx={{ display: { xs: "flex", md: "none" } }} onClick={() => setOpen(true)} color="inherit">
         <SearchIcon />
       </IconButton>
 
-      <SearchContainer sx={{ display: { xs: "none", md: "block" } }}>
+      <SearchContainer sx={{ display: { xs: "none", md: "block" }, width: { md: "450px !important", lg: "60% !important" } }}>
         <SearchIconWrapper>
           <SearchIcon />
         </SearchIconWrapper>
-        <StyledInputBase placeholder="Buscar…" inputProps={{ "aria-label": "search" }} />
+        <StyledInputBase
+          placeholder="Buscar…"
+          inputProps={{ "aria-label": "search" }}
+          fullWidth
+          value={search}
+          onChange={handleSearch}
+        />
       </SearchContainer>
 
       <Drawer

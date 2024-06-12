@@ -1,15 +1,14 @@
-import MailIcon from "@mui/icons-material/Mail";
-import { useState, useEffect } from "react";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Box } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import * as React from "react";
-import Notification from "./Notification";
+import { useEffect, useState } from "react";
 import { ProductCart } from "../../App";
-
+import Notification from "./Notification";
 
 export type MoreInfoProps = {
   shoppingCart: ProductCart[];
@@ -45,18 +44,18 @@ const MoreInfo = ({ shoppingCart }: MoreInfoProps) => {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <Notification icon={<ShoppingCartIcon />} numberOfNotifications={amountProducts} text="Carrito de compras" />
+        <Notification icon={<AccountCircleIcon />} numberOfNotifications={0} text="Perfil" />
       </MenuItem>
       <MenuItem>
-        <Notification icon={<MailIcon />} numberOfNotifications={0} text="Mensajes" />
+        <Notification icon={<ShoppingCartIcon />} numberOfNotifications={amountProducts} text="Carrito de compras" />
       </MenuItem>
     </Menu>
   );
   return (
     <div>
       <Box display={{ xs: "none", md: "flex" }}>
+        <Notification icon={<AccountCircleIcon />} numberOfNotifications={0} />
         <Notification icon={<ShoppingCartIcon />} numberOfNotifications={amountProducts} />
-        <Notification icon={<MailIcon />} numberOfNotifications={0} />
       </Box>
       <Box display={{ xs: "flex", md: "none" }}>
         <IconButton

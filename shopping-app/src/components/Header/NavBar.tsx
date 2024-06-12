@@ -17,9 +17,11 @@ export type MenuItem = {
 export type NavbarProps = {
   navLinks: MenuItem[];
   shoppingCart: ProductCart[];
+  search: string;
+  setSearch: (search: string) => void;
 };
 
-const Navbar = ({ navLinks, shoppingCart }: NavbarProps) => {
+const Navbar = ({ navLinks, shoppingCart, search, setSearch }: NavbarProps) => {
   const [open, setOpen] = useState<boolean>(false);
 
   const [activePage, setActivePage] = useState("/");
@@ -31,17 +33,15 @@ const Navbar = ({ navLinks, shoppingCart }: NavbarProps) => {
     <Box position="sticky" top={0} zIndex={100}>
       <AppBar position="static">
         <Container maxWidth="xl">
-          <Toolbar>
+          <Toolbar sx={{ justifyContent: "space-between" }}>
             <Box display={{ xs: "block", md: "none" }}>
               <IconButton color="inherit" size="large" onClick={() => setOpen(true)}>
                 <MenuIcon />
               </IconButton>
             </Box>
-            <Typography variant="h6" flexGrow={1}>
-              Curso React Intermedio
-            </Typography>
-            <Search />
-            <MoreInfo   shoppingCart={shoppingCart}/>
+            <Typography variant="h6">Curso React Intermedio</Typography>
+            <Search search={search} setSearch={setSearch} />
+            <MoreInfo shoppingCart={shoppingCart} />
           </Toolbar>
         </Container>
       </AppBar>

@@ -1,39 +1,16 @@
 import { Grid } from "@mui/material";
-import { useCallback, useEffect, useState } from "react";
-import CardItem from "../components/Card/CardItem";
 import { ProductCart } from "../components/App";
-import { generateDiscount, transformPrice } from "../util/utils";
+import CardItem from "../components/Card/CardItem";
 import { Product } from "../interfaces/Product";
 
 export type HomeProps = {
   shoppingCart: ProductCart[];
   setShoppingCart: (value: ProductCart[]) => void;
+  products: Product[];
+  isLoading: boolean;
 };
 
-const Home = ({ setShoppingCart, shoppingCart }: HomeProps) => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [products, setProducts] = useState<Product[]>([]);
-
-  const fetchProducts = useCallback(async () => {
-    fetch("https://fakestoreapi.com/products")
-      .then((res) => res.json())
-      .then((json) =>
-        json.map((product: any) => {
-          const priceCol = transformPrice(product.price);
-          const discount = generateDiscount(priceCol);
-          const priceWithDiscount = discount > 0 ? priceCol * (discount / 100) : priceCol;
-          return { ...product, discount, price: priceCol, priceDiscount: priceWithDiscount };
-        })
-      )
-      .then((json) => setProducts(json))
-      .catch((error) => console.error(error))
-      .finally(() => setIsLoading(false));
-  }, []);
-
-  useEffect(() => {
-    fetchProducts();
-  }, [fetchProducts]);
-
+const Home = ({ setShoppingCart, shoppingCart, isLoading, products }: HomeProps) => {
   return (
     <Grid container maxWidth={"xl"} spacing={2} my={2}>
       {isLoading
