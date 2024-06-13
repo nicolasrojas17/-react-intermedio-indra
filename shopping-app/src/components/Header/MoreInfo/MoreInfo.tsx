@@ -45,7 +45,7 @@ const MoreInfo = ({ shoppingCart, setCartOpen }: MoreInfoProps) => {
       onClose={handleMobileMenuClose}
     >
       <MenuItem sx={{ minWidth: 200 }}>
-        <Notification icon={<AccountCircleIcon />} numberOfNotifications={0} text="Perfil" />
+        <Notification icon={<AccountCircleIcon />} numberOfNotifications={0} text="Iniciar sesión" />
       </MenuItem>
     </Menu>
   );

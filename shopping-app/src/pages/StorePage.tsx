@@ -5,7 +5,7 @@ import { Product } from "../interfaces/Product";
 import Category from "../components/Header/Category/Category";
 import Stack from "@mui/material/Stack";
 
-export type HomeProps = {
+export type StorePageProps = {
   shoppingCart: ProductCart[];
   products: Product[];
   isLoading: boolean;
@@ -18,7 +18,7 @@ export type HomeProps = {
   handleRemoveSearch: () => void;
 };
 
-const Home = (props: HomeProps) => {
+const StorePage = (props: StorePageProps) => {
   const { shoppingCart, isLoading, products, categories, category, search } = props;
   const { setShoppingCart, setCategory, handleRemoveCategory, handleRemoveSearch } = props;
 
@@ -72,4 +72,4 @@ const Home = (props: HomeProps) => {
   );
 };
 
-export default Home;
+export default StorePage;
