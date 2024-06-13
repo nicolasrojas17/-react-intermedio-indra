@@ -41,7 +41,9 @@ const Navbar = ({
       <AppBar position="static">
         <Container maxWidth="xl">
           <Toolbar sx={{ justifyContent: "space-between" }}>
-            <Typography variant="h6">Curso React Intermedio</Typography>
+            <Typography variant="h6" component={Link} to={"/store"} color={"secondary"} sx={{ textDecoration: "none" }}>
+              Curso React Intermedio
+            </Typography>
             <Search search={search} setSearch={setSearch} />
             <MoreInfo shoppingCart={shoppingCart} setCartOpen={setCartOpen} />
           </Toolbar>
@@ -68,19 +70,21 @@ const Navbar = ({
           handleAddProductToCart={handleAddProductToCart}
           handleRemoveProductFromCart={handleRemoveProductFromCart}
         />
-        <Box display={"flex"} justifyContent={"center"} mx={5}>
-          <Button
-            fullWidth
-            startIcon={<ShoppingCartCheckoutIcon />}
-            variant="outlined"
-            color="success"
-            component={Link}
-            to={"/cart"}
-            onClick={() => setCartOpen(false)}
-          >
-            Go to Cart
-          </Button>
-        </Box>
+        {cartProducts.length > 0 && (
+          <Box display={"flex"} justifyContent={"center"} mx={5}>
+            <Button
+              fullWidth
+              startIcon={<ShoppingCartCheckoutIcon />}
+              variant="outlined"
+              color="success"
+              component={Link}
+              to={"/cart"}
+              onClick={() => setCartOpen(false)}
+            >
+              Go to Cart
+            </Button>
+          </Box>
+        )}
       </Drawer>
     </Box>
   );
