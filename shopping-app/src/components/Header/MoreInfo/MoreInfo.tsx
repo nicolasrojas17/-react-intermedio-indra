@@ -1,21 +1,23 @@
-import MoreIcon from "@mui/icons-material/MoreVert";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import MoreIcon from "@mui/icons-material/MoreVert";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Badge, Box } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import * as React from "react";
-import { useEffect, useState } from "react";
-import { ProductCart } from "../../App";
+import { useContext, useEffect, useState } from "react";
+import { ShoppingCartContext } from "../../../hooks/ShoppingCartContextProvider";
 import Notification from "./Notification";
 
 export type MoreInfoProps = {
-  shoppingCart: ProductCart[];
   setCartOpen: (open: boolean) => void;
 };
 
-const MoreInfo = ({ shoppingCart, setCartOpen }: MoreInfoProps) => {
+const MoreInfo = ({ setCartOpen }: MoreInfoProps) => {
+  const shoppingContextData = useContext(ShoppingCartContext);
+  const { shoppingCart } = shoppingContextData;
+
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState<null | HTMLElement>(null);
   const [amountProducts, setAmountProducts] = useState(0);
 

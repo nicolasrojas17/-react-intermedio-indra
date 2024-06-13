@@ -5,26 +5,19 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { Product } from "../../interfaces/Product";
-import { ProductCart } from "../App";
+import { useContext } from "react";
+import { ShoppingCartContext } from "../../hooks/ShoppingCartContextProvider";
 import CartViewDesktop from "./CartViewDesktop";
 import CartViewMobile from "./CartViewMobile";
 
 export type CartViewDetailsProps = {
-  cartProducts: ProductCart[];
   viewTotal: boolean;
-  handleRemoveAllItemsCart: (value: number) => void;
-  handleAddProductToCart: (product: Product, amount: number) => void;
-  handleRemoveProductFromCart: (productId: number) => void;
 };
 
-const CartViewDetails = ({
-  cartProducts,
-  viewTotal,
-  handleRemoveAllItemsCart,
-  handleAddProductToCart,
-  handleRemoveProductFromCart,
-}: CartViewDetailsProps) => {
+const CartViewDetails = ({ viewTotal }: CartViewDetailsProps) => {
+  const shoppingContextData = useContext(ShoppingCartContext);
+  const { shoppingCart } = shoppingContextData;
+
   return (
     <TableContainer sx={{ padding: 2, width: "100%", overflow: "auto" }}>
       <Table aria-label="simple table">
@@ -39,7 +32,7 @@ const CartViewDetails = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {cartProducts.length === 0 && (
+          {shoppingCart.length === 0 && (
             <TableRow>
               <TableCell align="center" colSpan={6}>
                 <Typography variant="h5" component="p">
@@ -49,21 +42,8 @@ const CartViewDetails = ({
             </TableRow>
           )}
 
-          <CartViewDesktop
-            cartProducts={cartProducts}
-            viewTotal={viewTotal}
-            handleRemoveAllItemsCart={handleRemoveAllItemsCart}
-            handleAddProductToCart={handleAddProductToCart}
-            handleRemoveProductFromCart={handleRemoveProductFromCart}
-          />
-
-          <CartViewMobile
-            cartProducts={cartProducts}
-            viewTotal={viewTotal}
-            handleRemoveAllItemsCart={handleRemoveAllItemsCart}
-            handleAddProductToCart={handleAddProductToCart}
-            handleRemoveProductFromCart={handleRemoveProductFromCart}
-          />
+          <CartViewDesktop viewTotal={viewTotal} />
+          <CartViewMobile viewTotal={viewTotal} />
         </TableBody>
       </Table>
     </TableContainer>

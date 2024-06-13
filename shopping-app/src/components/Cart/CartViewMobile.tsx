@@ -2,28 +2,21 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
 import { Box, Grid, IconButton, TableCell, TableRow, Typography } from "@mui/material";
-import { Product } from "../../interfaces/Product";
+import { useContext } from "react";
+import { ShoppingCartContext } from "../../hooks/ShoppingCartContextProvider";
 import { formatPrice } from "../../util/utils";
-import { ProductCart } from "../App";
 
 export type CartViewMobileProps = {
-  cartProducts: ProductCart[];
   viewTotal: boolean;
-  handleRemoveAllItemsCart: (value: number) => void;
-  handleAddProductToCart: (product: Product, amount: number) => void;
-  handleRemoveProductFromCart: (productId: number) => void;
 };
 
-const CartViewMobile = ({
-  cartProducts,
-  viewTotal,
-  handleRemoveAllItemsCart,
-  handleAddProductToCart,
-  handleRemoveProductFromCart,
-}: CartViewMobileProps) => {
+const CartViewMobile = ({ viewTotal }: CartViewMobileProps) => {
+  const shoppingContextData = useContext(ShoppingCartContext);
+  const { shoppingCart, handleRemoveAllItemsCart, handleAddProductToCart, handleRemoveProductFromCart } = shoppingContextData;
+
   return (
     <>
-      {cartProducts.map((cart) => (
+      {shoppingCart.map((cart) => (
         <TableRow key={cart.product.id} sx={{ display: { xs: "table-row", md: "none" } }}>
           <TableCell>
             <Box display={"flex"} alignItems={"center"} pr={2} justifyContent={"space-between"}>
@@ -94,7 +87,7 @@ const CartViewMobile = ({
       {viewTotal && (
         <TableRow sx={{ display: { xs: "table-row", md: "none" } }}>
           <TableCell align="right" colSpan={3} sx={{ border: 0 }}>
-            Total: {`$${formatPrice(cartProducts.reduce((acc, item) => acc + item.product.price * item.amount, 0))}`}
+            Total: {`$${formatPrice(shoppingCart.reduce((acc, item) => acc + item.product.price * item.amount, 0))}`}
           </TableCell>
         </TableRow>
       )}

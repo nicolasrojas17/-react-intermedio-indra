@@ -1,8 +1,18 @@
-import { useState } from "react";
+import { createContext, useMemo, useState } from "react";
 import { ProductCart } from "../components/App";
 import { Product } from "../interfaces/Product";
 
-const useShoppingCart = () => {
+export interface ShoppingCartValue {
+  shoppingCart: ProductCart[];
+  setShoppingCart: React.Dispatch<React.SetStateAction<ProductCart[]>>;
+  handleRemoveAllItemsCart: (productId: number) => void;
+  handleAddProductToCart: (product: Product, amount: number) => void;
+  handleRemoveProductFromCart: (productId: number) => void;
+}
+
+export const ShoppingCartContext = createContext<ShoppingCartValue>(null as any) as React.Context<ShoppingCartValue>;
+
+const ShoppingCartContextProvider = ({ children }: any) => {
   const [shoppingCart, setShoppingCart] = useState<ProductCart[]>([]);
 
   const handleRemoveAllItemsCart = (productId: number) => {
@@ -41,7 +51,18 @@ const useShoppingCart = () => {
     );
   };
 
-  return [shoppingCart, setShoppingCart, handleRemoveAllItemsCart, handleAddProductToCart, handleRemoveProductFromCart] as const;
+  const objShoppingCart = useMemo(
+    () => ({
+      shoppingCart,
+      setShoppingCart,
+      handleRemoveAllItemsCart,
+      handleAddProductToCart,
+      handleRemoveProductFromCart,
+    }),
+    [shoppingCart, setShoppingCart, handleRemoveAllItemsCart, handleAddProductToCart, handleRemoveProductFromCart]
+  );
+
+  return <ShoppingCartContext.Provider value={objShoppingCart}>{children}</ShoppingCartContext.Provider>;
 };
 
-export default useShoppingCart;
+export default ShoppingCartContextProvider;

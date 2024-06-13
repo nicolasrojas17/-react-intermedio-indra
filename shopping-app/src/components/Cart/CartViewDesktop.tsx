@@ -2,27 +2,20 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
 import { Box, IconButton, TableCell, TableRow, Typography } from "@mui/material";
-import { Product } from "../../interfaces/Product";
+import { useContext } from "react";
+import { ShoppingCartContext } from "../../hooks/ShoppingCartContextProvider";
 import { formatPrice } from "../../util/utils";
-import { ProductCart } from "../App";
 
 export type CartViewDesktopProps = {
-  cartProducts: ProductCart[];
   viewTotal: boolean;
-  handleRemoveAllItemsCart: (value: number) => void;
-  handleAddProductToCart: (product: Product, amount: number) => void;
-  handleRemoveProductFromCart: (productId: number) => void;
 };
-const CartViewDesktop = ({
-  cartProducts,
-  viewTotal,
-  handleRemoveAllItemsCart,
-  handleAddProductToCart,
-  handleRemoveProductFromCart,
-}: CartViewDesktopProps) => {
+const CartViewDesktop = ({ viewTotal }: CartViewDesktopProps) => {
+  const shoppingContextData = useContext(ShoppingCartContext);
+  const { shoppingCart, handleRemoveAllItemsCart, handleAddProductToCart, handleRemoveProductFromCart } = shoppingContextData;
+
   return (
     <>
-      {cartProducts.map((cart) => (
+      {shoppingCart.map((cart) => (
         <TableRow
           key={cart.product.id}
           sx={{ display: { xs: "none", md: "table-row" }, "&:last-child td, &:last-child th": { border: 0 } }}
@@ -65,7 +58,7 @@ const CartViewDesktop = ({
             Total:
           </TableCell>
           <TableCell align="center" sx={{ border: 0 }}>
-            {`$${formatPrice(cartProducts.reduce((acc, item) => acc + item.product.price * item.amount, 0))}`}
+            {`$${formatPrice(shoppingCart.reduce((acc, item) => acc + item.product.price * item.amount, 0))}`}
           </TableCell>
         </TableRow>
       )}

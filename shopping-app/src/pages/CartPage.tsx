@@ -1,26 +1,16 @@
-import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import ReplayIcon from "@mui/icons-material/Replay";
-import { ProductCart } from "../components/App";
-import Cart from "../components/Cart/Cart";
-import { Product } from "../interfaces/Product";
+import { Box, Button, Container, Grid, Typography } from "@mui/material";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Cart from "../components/Cart/Cart";
+import { ShoppingCartContext } from "../hooks/ShoppingCartContextProvider";
 import { formatPrice } from "../util/utils";
-import { useEffect, useState } from "react";
 
-export type CartPageProps = {
-  shoppingCart: ProductCart[];
-  handleRemoveAllItemsCart: (value: number) => void;
-  handleAddProductToCart: (product: Product, amount: number) => void;
-  handleRemoveProductFromCart: (productId: number) => void;
-};
-
-const CartPage = ({
-  shoppingCart,
-  handleRemoveAllItemsCart,
-  handleAddProductToCart,
-  handleRemoveProductFromCart,
-}: CartPageProps) => {
+const CartPage = () => {
   const navigate = useNavigate();
+
+  const shoppingContextData = useContext(ShoppingCartContext);
+  const { shoppingCart } = shoppingContextData;
 
   const [subTotal, setSubTotal] = useState<number>(0);
   const [shipping, setShipping] = useState<number>(0);
@@ -43,13 +33,7 @@ const CartPage = ({
           <Typography variant="h5" align="center" pb={2} borderBottom={1} borderColor={"rgb(221, 221, 221)"}>
             Shopping Cart
           </Typography>
-          <Cart
-            viewTotal={false}
-            cartProducts={shoppingCart}
-            handleRemoveAllItemsCart={handleRemoveAllItemsCart}
-            handleAddProductToCart={handleAddProductToCart}
-            handleRemoveProductFromCart={handleRemoveProductFromCart}
-          />
+          <Cart viewTotal={false} />
           <Box display={"flex"} justifyContent={"center"} my={2}>
             <Button startIcon={<ReplayIcon />} variant="outlined" component={Link} to={"/store"}>
               Continue Shopping

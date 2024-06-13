@@ -1,10 +1,9 @@
 import CloseIcon from "@mui/icons-material/Close";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import { AppBar, Box, Button, Container, Drawer, IconButton, Toolbar, Typography } from "@mui/material";
-import { ReactElement, useState } from "react";
+import { ReactElement, useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import { Product } from "../../interfaces/Product";
-import { ProductCart } from "../App";
+import { ShoppingCartContext } from "../../hooks/ShoppingCartContextProvider";
 import Cart from "../Cart/Cart";
 import MoreInfo from "./MoreInfo/MoreInfo";
 import Search from "./Search/Search";
@@ -15,21 +14,10 @@ export type MenuItem = {
   icon: ReactElement;
 };
 
-export type NavbarProps = {
-  shoppingCart: ProductCart[];
-  cartProducts: ProductCart[];
-  handleRemoveAllItemsCart: (value: number) => void;
-  handleAddProductToCart: (product: Product, amount: number) => void;
-  handleRemoveProductFromCart: (productId: number) => void;
-};
+const Navbar = () => {
+  const shoppingContextData = useContext(ShoppingCartContext);
+  const { shoppingCart } = shoppingContextData;
 
-const Navbar = ({
-  shoppingCart,
-  cartProducts,
-  handleRemoveAllItemsCart,
-  handleAddProductToCart,
-  handleRemoveProductFromCart,
-}: NavbarProps) => {
   const [cartOpen, setCartOpen] = useState<boolean>(false);
 
   return (
@@ -41,7 +29,7 @@ const Navbar = ({
               Curso React Intermedio
             </Typography>
             <Search />
-            <MoreInfo shoppingCart={shoppingCart} setCartOpen={setCartOpen} />
+            <MoreInfo setCartOpen={setCartOpen} />
           </Toolbar>
         </Container>
       </AppBar>
@@ -59,14 +47,9 @@ const Navbar = ({
           <CloseIcon />
         </IconButton>
 
-        <Cart
-          viewTotal={true}
-          cartProducts={cartProducts}
-          handleRemoveAllItemsCart={handleRemoveAllItemsCart}
-          handleAddProductToCart={handleAddProductToCart}
-          handleRemoveProductFromCart={handleRemoveProductFromCart}
-        />
-        {cartProducts.length > 0 && (
+        <Cart viewTotal={true} />
+
+        {shoppingCart.length > 0 && (
           <Box display={"flex"} justifyContent={"center"} mx={5}>
             <Button
               fullWidth

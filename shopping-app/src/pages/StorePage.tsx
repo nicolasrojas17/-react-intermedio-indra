@@ -1,23 +1,19 @@
 import { Box, Chip, Grid, Typography } from "@mui/material";
-import { ProductCart } from "../components/App";
-import CardItem from "../components/Card/CardItem";
-import { Product } from "../interfaces/Product";
-import Category from "../components/Header/Category/Category";
 import Stack from "@mui/material/Stack";
-import { StoreContext } from "../hooks/StoreContextProvider";
 import { useContext } from "react";
+import CardItem from "../components/Card/CardItem";
+import Category from "../components/Header/Category/Category";
+import { ShoppingCartContext } from "../hooks/ShoppingCartContextProvider";
+import { StoreContext } from "../hooks/StoreContextProvider";
+import { Product } from "../interfaces/Product";
 
-export type StorePageProps = {
-  shoppingCart: ProductCart[];
-  setShoppingCart: (value: ProductCart[]) => void;
-};
-
-const StorePage = (props: StorePageProps) => {
+const StorePage = () => {
   const storeContextData = useContext(StoreContext);
   const { isLoading, productsFiltered, category, search } = storeContextData;
   const { handleRemoveCategory, handleRemoveSearch } = storeContextData;
 
-  const { shoppingCart, setShoppingCart } = props;
+  const shoppingContextData = useContext(ShoppingCartContext);
+  const { shoppingCart, setShoppingCart } = shoppingContextData;
 
   return (
     <>
