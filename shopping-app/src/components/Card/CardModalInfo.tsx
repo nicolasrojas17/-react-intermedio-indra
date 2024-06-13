@@ -8,7 +8,9 @@ import { useContext } from "react";
 import { ShoppingCartContext } from "../../hooks/ShoppingCartContextProvider";
 import { Product } from "../../interfaces/Product";
 import { formatPrice } from "../../util/utils";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import ChipItem from "../Chip/ChipItem";
+import { Link } from "react-router-dom";
 
 export type CardModalInfoProps = {
   product: Product;
@@ -76,9 +78,16 @@ const CardModalInfo = (props: CardModalInfoProps) => {
           />
         </Box>
         <Box width={{ xs: "100%", md: "50%" }} ml={2}>
+          <Box display={"flex"} justifyContent={"end"} alignItems={"center"} mx={1} my={3}>
+            <Button startIcon={<VisibilityIcon />} variant="text" component={Link} to={`/store/details/${product.id}`}>
+              View Details
+            </Button>
+          </Box>
+
           <Typography variant="h5" fontWeight={"bold"} mx={1} my={3}>
             {product.title}
           </Typography>
+
           <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"} py={2}>
             <Box>
               {product.discount > 0 ? (

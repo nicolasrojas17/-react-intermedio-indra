@@ -27,8 +27,8 @@ const CardItem = ({ product, altImg }: CardItemProps) => {
   const { handleRemoveProductsAmount, handleAddProductsAmount, handleAddToCart } = shoppingContextData;
 
   const [productItem, setProductItem] = useState<ProductCart>();
-  const [openModalInfo, setOpenModalInfo] = useState<boolean>(false);
   const [productInCart, setProductInCart] = useState<number>(0);
+  const [openModalInfo, setOpenModalInfo] = useState<boolean>(false);
 
   const handleOpen = () => setOpenModalInfo(true);
 
