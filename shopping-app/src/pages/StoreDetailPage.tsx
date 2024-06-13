@@ -1,15 +1,16 @@
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 import { Box, Button, CircularProgress, Container, Grid, IconButton, Stack, Typography } from "@mui/material";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { ProductCart } from "../components/App";
+import CardRating from "../components/Card/CardRating";
+import ChipItem from "../components/Chip/ChipItem";
+import { ShoppingCartContext } from "../hooks/ShoppingCartContextProvider";
 import { Product } from "../interfaces/Product";
 import { getProductById } from "../services/productService";
 import { formatPrice } from "../util/utils";
-import CardRating from "../components/Card/CardRating";
-import { ShoppingCartContext } from "../hooks/ShoppingCartContextProvider";
-import RemoveIcon from "@mui/icons-material/Remove";
-import AddIcon from "@mui/icons-material/Add";
-import ChipItem from "../components/Chip/ChipItem";
-import { ProductCart } from "../components/App";
+import CardItem from "../components/Card/CardItem";
 
 const StoreDetailPage = () => {
   const { productId } = useParams();
@@ -19,12 +20,13 @@ const StoreDetailPage = () => {
   const { handleRemoveProductsAmount, handleAddProductsAmount, handleAddToCart } = shoppingContextData;
 
   const [product, setProduct] = useState<Product>();
+  const [productsByCategory, setProductsByCategory] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [productItem, setProductItem] = useState<ProductCart>();
   const [productInCart, setProductInCart] = useState<number>(0);
 
   const fetchProduct = useCallback(async () => {
-    await getProductById(productId ?? "", setProduct, setIsLoading);
+    await getProductById(productId ?? "", setProduct, setProductsByCategory, setIsLoading);
   }, [productId]);
 
   useEffect(() => {
@@ -113,6 +115,14 @@ const StoreDetailPage = () => {
                 Add to cart
               </Button>
             </Box>
+          </Box>
+        </Grid>
+
+        <Grid item xs={12} px={2} mt={5} mx={1}>
+          <Box display={"flex"} justifyContent={"center"} alignItems={"center"} my={3}>
+          {productsByCategory?.map((product: Product, index) => [
+            <CardItem key={product.id} product={product} altImg={`card item-${index + 1}`} />,
+          ])}
           </Box>
         </Grid>
       </Grid>
