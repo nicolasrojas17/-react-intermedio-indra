@@ -4,6 +4,8 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { Box, Button, Modal, Stack } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
+import { useContext } from "react";
+import { ShoppingCartContext } from "../../hooks/ShoppingCartContextProvider";
 import { Product } from "../../interfaces/Product";
 import { formatPrice } from "../../util/utils";
 import ChipItem from "../Chip/ChipItem";
@@ -13,16 +15,16 @@ export type CardModalInfoProps = {
   altImg: string;
   productInCart: number;
   openModalInfo: boolean;
-  amountProductsToAddCart: number;
-  handleAddProductsAmount: () => void;
-  handleRemoveProductsAmount: () => void;
-  handleAddToCart: () => void;
   setOpenModalInfo: (open: boolean) => void;
 };
 
 const CardModalInfo = (props: CardModalInfoProps) => {
-  const { product, altImg, openModalInfo, productInCart, amountProductsToAddCart } = props;
-  const { handleAddProductsAmount, handleRemoveProductsAmount, handleAddToCart, setOpenModalInfo } = props;
+  const shoppingContextData = useContext(ShoppingCartContext);
+  const { amountProductsToAddCart } = shoppingContextData;
+  const { handleRemoveProductsAmount, handleAddProductsAmount, handleAddToCart } = shoppingContextData;
+
+  const { product, altImg, openModalInfo, productInCart } = props;
+  const { setOpenModalInfo } = props;
 
   const handleClose = () => setOpenModalInfo(false);
 
@@ -103,7 +105,7 @@ const CardModalInfo = (props: CardModalInfoProps) => {
               </IconButton>
             </Box>
           </Box>
-          <Button sx={{ width: "100%", my: 2 }} variant="outlined" onClick={handleAddToCart}>
+          <Button sx={{ width: "100%", my: 2 }} variant="outlined" onClick={() => handleAddToCart(product)}>
             Add to cart
           </Button>
         </Box>

@@ -11,54 +11,26 @@ import CardModalInfo from "./CardModalInfo";
 import CardRating from "./CardRating";
 import ChipItem from "../Chip/ChipItem";
 import { StoreContext } from "../../hooks/StoreContextProvider";
+import { ShoppingCartContext } from "../../hooks/ShoppingCartContextProvider";
 
 export type CardItemProps = {
   product: Product;
   altImg: string;
-  shoppingCart?: ProductCart[];
-  setShoppingCart?: (value: ProductCart[]) => void;
 };
 
-const CardItem = ({ product, altImg, shoppingCart, setShoppingCart }: CardItemProps) => {
+const CardItem = ({ product, altImg }: CardItemProps) => {
   const storeContextData = useContext(StoreContext);
   const { isLoading } = storeContextData;
+
+  const shoppingContextData = useContext(ShoppingCartContext);
+  const { shoppingCart, amountProductsToAddCart } = shoppingContextData;
+  const { handleRemoveProductsAmount, handleAddProductsAmount, handleAddToCart } = shoppingContextData;
 
   const [productItem, setProductItem] = useState<ProductCart>();
   const [openModalInfo, setOpenModalInfo] = useState<boolean>(false);
   const [productInCart, setProductInCart] = useState<number>(0);
-  const [amountProductsToAddCart, setAmountProductsToAddCart] = useState<number>(1);
 
   const handleOpen = () => setOpenModalInfo(true);
-
-  const handleResetAmountProducts = () => setAmountProductsToAddCart(1);
-
-  const handleAddToCart = () => {
-    if (shoppingCart && setShoppingCart && product.id) {
-      const productFind = shoppingCart.find((item) => item.product.id === product.id);
-      if (!productFind) {
-        setShoppingCart([...shoppingCart, { product, amount: amountProductsToAddCart }]);
-        handleResetAmountProducts();
-        return;
-      }
-      setShoppingCart(
-        shoppingCart.map((item) => {
-          return item.product.id === product.id
-            ? { ...item, amount: productFind.amount ? productFind.amount + amountProductsToAddCart : amountProductsToAddCart }
-            : item;
-        })
-      );
-      handleResetAmountProducts();
-    }
-  };
-
-  const handleRemoveProductsAmount = () => {
-    if (amountProductsToAddCart === 1) return;
-    setAmountProductsToAddCart(amountProductsToAddCart - 1);
-  };
-
-  const handleAddProductsAmount = () => {
-    setAmountProductsToAddCart(amountProductsToAddCart + 1);
-  };
 
   useEffect(() => {
     setProductInCart(productItem?.amount ?? 0);
@@ -148,17 +120,13 @@ const CardItem = ({ product, altImg, shoppingCart, setShoppingCart }: CardItemPr
                 <CardModalInfo
                   product={product}
                   altImg={altImg}
-                  handleAddToCart={handleAddToCart}
-                  handleAddProductsAmount={handleAddProductsAmount}
-                  handleRemoveProductsAmount={handleRemoveProductsAmount}
-                  amountProductsToAddCart={amountProductsToAddCart}
                   productInCart={productInCart}
                   openModalInfo={openModalInfo}
                   setOpenModalInfo={setOpenModalInfo}
                 />
               </CardActions>
             </Box>
-            <Button onClick={handleAddToCart}>Add to cart</Button>
+            <Button onClick={() => handleAddToCart(product)}>Add to cart</Button>
           </Card>
         </Grid>
       )}

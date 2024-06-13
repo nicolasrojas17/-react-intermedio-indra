@@ -15,7 +15,7 @@ export interface StoreContextValue {
   handleChangeCategory: (event: any) => void;
 }
 
-export const StoreContext = createContext<StoreContextValue>(null as any) as React.Context<StoreContextValue>;
+export const StoreContext = createContext<StoreContextValue>(null as any);
 
 const StoreContextProvider = ({ children }: any) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);

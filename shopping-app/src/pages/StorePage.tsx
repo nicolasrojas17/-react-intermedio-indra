@@ -3,7 +3,6 @@ import Stack from "@mui/material/Stack";
 import { useContext } from "react";
 import CardItem from "../components/Card/CardItem";
 import Category from "../components/Header/Category/Category";
-import { ShoppingCartContext } from "../hooks/ShoppingCartContextProvider";
 import { StoreContext } from "../hooks/StoreContextProvider";
 import { Product } from "../interfaces/Product";
 
@@ -11,9 +10,6 @@ const StorePage = () => {
   const storeContextData = useContext(StoreContext);
   const { isLoading, productsFiltered, category, search } = storeContextData;
   const { handleRemoveCategory, handleRemoveSearch } = storeContextData;
-
-  const shoppingContextData = useContext(ShoppingCartContext);
-  const { shoppingCart, setShoppingCart } = shoppingContextData;
 
   return (
     <>
@@ -36,22 +32,10 @@ const StorePage = () => {
       <Grid container maxWidth={"xl"} spacing={2} mb={5} justifyContent={"center"}>
         {isLoading
           ? Array.from(new Array(12)).map((_, index) => [
-              <CardItem
-                key={index + 1}
-                product={{} as Product}
-                altImg={`card item-${index + 1}`}
-                shoppingCart={shoppingCart}
-                setShoppingCart={setShoppingCart}
-              />,
+              <CardItem key={index + 1} product={{} as Product} altImg={`card item-${index + 1}`} />,
             ])
           : productsFiltered.map((product: Product, index) => [
-              <CardItem
-                key={product.id}
-                product={product}
-                altImg={`card item-${index + 1}`}
-                shoppingCart={shoppingCart}
-                setShoppingCart={setShoppingCart}
-              />,
+              <CardItem key={product.id} product={product} altImg={`card item-${index + 1}`} />,
             ])}
         {productsFiltered.length === 0 && (
           <Typography variant="h5" component="h5">
