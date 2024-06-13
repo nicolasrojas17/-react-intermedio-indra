@@ -1,16 +1,11 @@
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { useContext } from "react";
+import { StoreContext } from "../../../hooks/StoreContextProvider";
 
-export type CategoryProps = {
-  categories: string[];
-  category: string;
-  setCategory: (value: string) => void;
-};
+const Category = () => {
+  const storeContextData = useContext(StoreContext);
+  const { categories, category, handleChangeCategory } = storeContextData;
 
-const Category = ({ categories, category, setCategory }: CategoryProps) => {
-  const handleChangeCategory = (event: any) => {
-    setCategory(event.target.value as string);
-  };
-  
   return (
     <FormControl sx={{ m: 1, minWidth: 180 }}>
       <InputLabel id="demo-simple-select-helper-label">Category</InputLabel>
@@ -24,8 +19,8 @@ const Category = ({ categories, category, setCategory }: CategoryProps) => {
         <MenuItem value="">
           <em>All products</em>
         </MenuItem>
-        {categories.map((category, index) => (
-          <MenuItem key={index + 1} value={category}>
+        {categories.map((category) => (
+          <MenuItem key={category} value={category}>
             {category}
           </MenuItem>
         ))}

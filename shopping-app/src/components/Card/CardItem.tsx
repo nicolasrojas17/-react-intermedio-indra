@@ -2,7 +2,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { Box, Button, CardActions, CardContent, CardMedia, Grid, IconButton, Stack, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Product } from "../../interfaces/Product";
 import { formatPrice } from "../../util/utils";
 import { ProductCart } from "../App";
@@ -10,16 +10,19 @@ import CardItemSkeleton from "./CardItemSkeleton";
 import CardModalInfo from "./CardModalInfo";
 import CardRating from "./CardRating";
 import ChipItem from "../Chip/ChipItem";
+import { StoreContext } from "../../hooks/StoreContextProvider";
 
 export type CardItemProps = {
   product: Product;
   altImg: string;
-  isLoading: boolean;
   shoppingCart?: ProductCart[];
   setShoppingCart?: (value: ProductCart[]) => void;
 };
 
-const CardItem = ({ product, altImg, isLoading, shoppingCart, setShoppingCart }: CardItemProps) => {
+const CardItem = ({ product, altImg, shoppingCart, setShoppingCart }: CardItemProps) => {
+  const storeContextData = useContext(StoreContext);
+  const { isLoading } = storeContextData;
+
   const [productItem, setProductItem] = useState<ProductCart>();
   const [openModalInfo, setOpenModalInfo] = useState<boolean>(false);
   const [productInCart, setProductInCart] = useState<number>(0);

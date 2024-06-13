@@ -15,3 +15,20 @@ export const getProducts = async (setProducts: (products: any) => void, setIsLoa
     .catch((error) => console.error(error))
     .finally(() => setIsLoading(false));
 };
+
+export const getProductById = async (
+  productId: string,
+  setProduct: (product: any) => void,
+  setIsLoading: (val: boolean) => void
+) => {
+  fetch(`https://fakestoreapi.com/products/${productId}`)
+    .then((res) => res.json())
+    .then((json) => {
+      const priceCol = transformPrice(json.price);
+      const discount = generateDiscount(priceCol);
+      const priceWithDiscount = discount > 0 ? priceCol * (discount / 100) : priceCol;
+      setProduct({ ...json, discount, price: priceCol, priceDiscount: priceWithDiscount });
+    })
+    .catch((error) => console.error(error))
+    .finally(() => setIsLoading(false));
+};

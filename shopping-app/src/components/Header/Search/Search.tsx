@@ -2,7 +2,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Drawer, IconButton } from "@mui/material";
 import InputBase from "@mui/material/InputBase";
 import { alpha, styled } from "@mui/material/styles";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { StoreContext } from "../../../hooks/StoreContextProvider";
 
 const SearchContainer = styled("div")(({ theme }) => ({
   position: "relative",
@@ -50,12 +51,10 @@ const StyledInputBaseMobile = styled(InputBase)(({ theme }) => ({
   margin: "25px 5px",
 }));
 
-export type SearchProps = {
-  search: string;
-  setSearch: (search: string) => void;
-};
+const Search = () => {
+  const storeContextData = useContext(StoreContext);
+  const { search, setSearch } = storeContextData;
 
-const Search = ({ search, setSearch }: SearchProps) => {
   const [open, setOpen] = useState(false);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {

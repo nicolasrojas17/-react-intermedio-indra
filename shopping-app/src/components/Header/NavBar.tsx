@@ -17,9 +17,7 @@ export type MenuItem = {
 
 export type NavbarProps = {
   shoppingCart: ProductCart[];
-  search: string;
   cartProducts: ProductCart[];
-  setSearch: (search: string) => void;
   handleRemoveAllItemsCart: (value: number) => void;
   handleAddProductToCart: (product: Product, amount: number) => void;
   handleRemoveProductFromCart: (productId: number) => void;
@@ -27,9 +25,7 @@ export type NavbarProps = {
 
 const Navbar = ({
   shoppingCart,
-  search,
   cartProducts,
-  setSearch,
   handleRemoveAllItemsCart,
   handleAddProductToCart,
   handleRemoveProductFromCart,
@@ -44,7 +40,7 @@ const Navbar = ({
             <Typography variant="h6" component={Link} to={"/store"} color={"secondary"} sx={{ textDecoration: "none" }}>
               Curso React Intermedio
             </Typography>
-            <Search search={search} setSearch={setSearch} />
+            <Search />
             <MoreInfo shoppingCart={shoppingCart} setCartOpen={setCartOpen} />
           </Toolbar>
         </Container>

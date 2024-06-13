@@ -4,23 +4,20 @@ import CardItem from "../components/Card/CardItem";
 import { Product } from "../interfaces/Product";
 import Category from "../components/Header/Category/Category";
 import Stack from "@mui/material/Stack";
+import { StoreContext } from "../hooks/StoreContextProvider";
+import { useContext } from "react";
 
 export type StorePageProps = {
   shoppingCart: ProductCart[];
-  products: Product[];
-  isLoading: boolean;
-  categories: string[];
-  category: string;
-  search: string;
   setShoppingCart: (value: ProductCart[]) => void;
-  setCategory: (value: string) => void;
-  handleRemoveCategory: () => void;
-  handleRemoveSearch: () => void;
 };
 
 const StorePage = (props: StorePageProps) => {
-  const { shoppingCart, isLoading, products, categories, category, search } = props;
-  const { setShoppingCart, setCategory, handleRemoveCategory, handleRemoveSearch } = props;
+  const storeContextData = useContext(StoreContext);
+  const { isLoading, productsFiltered, category, search } = storeContextData;
+  const { handleRemoveCategory, handleRemoveSearch } = storeContextData;
+
+  const { shoppingCart, setShoppingCart } = props;
 
   return (
     <>
@@ -37,7 +34,7 @@ const StorePage = (props: StorePageProps) => {
           {search && <Chip label={`Search: ${search}`} variant="outlined" onDelete={handleRemoveSearch} />}
           {category && <Chip label={`Category: ${category}`} variant="outlined" onDelete={handleRemoveCategory} />}
         </Stack>
-        <Category categories={categories} category={category} setCategory={setCategory} />
+        <Category />
       </Box>
 
       <Grid container maxWidth={"xl"} spacing={2} mb={5} justifyContent={"center"}>
@@ -45,24 +42,22 @@ const StorePage = (props: StorePageProps) => {
           ? Array.from(new Array(12)).map((_, index) => [
               <CardItem
                 key={index + 1}
-                isLoading={isLoading}
                 product={{} as Product}
                 altImg={`card item-${index + 1}`}
                 shoppingCart={shoppingCart}
                 setShoppingCart={setShoppingCart}
               />,
             ])
-          : products.map((product: Product, index) => [
+          : productsFiltered.map((product: Product, index) => [
               <CardItem
                 key={product.id}
                 product={product}
                 altImg={`card item-${index + 1}`}
-                isLoading={isLoading}
                 shoppingCart={shoppingCart}
                 setShoppingCart={setShoppingCart}
               />,
             ])}
-        {products.length === 0 && (
+        {productsFiltered.length === 0 && (
           <Typography variant="h5" component="h5">
             No products
           </Typography>

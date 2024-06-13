@@ -1,10 +1,13 @@
 import { Container } from "@mui/material";
 import { Navigate, Route, Routes } from "react-router-dom";
+import StoreContextProvider from "../hooks/StoreContextProvider";
 import useShoppingCart from "../hooks/useShoppingCart";
 import { Product } from "../interfaces/Product";
 import CartPage from "../pages/CartPage";
 import StorePage from "../pages/StorePage";
 import Navbar from "./Header/NavBar";
+import StoreDetailPage from "../pages/StoreDetailPage";
+
 /*
 const navLinks: MenuItem[] = [
   { title: "Store", path: "/store", icon: <HomeIcon /> },
@@ -18,29 +21,13 @@ export interface ProductCart {
 }
 
 const App = () => {
-  const [
-    shoppingCart,
-    isLoading,
-    categories,
-    productsFiltered,
-    category,
-    search,
-    setShoppingCart,
-    setSearch,
-    setCategory,
-    handleRemoveCategory,
-    handleRemoveSearch,
-    handleRemoveAllItemsCart,
-    handleAddProductToCart,
-    handleRemoveProductFromCart,
-  ] = useShoppingCart();
+  const [shoppingCart, setShoppingCart, handleRemoveAllItemsCart, handleAddProductToCart, handleRemoveProductFromCart] =
+    useShoppingCart();
 
   return (
-    <>
+    <StoreContextProvider>
       <Navbar
         shoppingCart={shoppingCart}
-        search={search}
-        setSearch={setSearch}
         cartProducts={shoppingCart}
         handleRemoveAllItemsCart={handleRemoveAllItemsCart}
         handleAddProductToCart={handleAddProductToCart}
@@ -48,23 +35,8 @@ const App = () => {
       />
       <Container maxWidth={"xl"}>
         <Routes>
-          <Route
-            path="/store"
-            element={
-              <StorePage
-                shoppingCart={shoppingCart}
-                setShoppingCart={setShoppingCart}
-                isLoading={isLoading}
-                products={productsFiltered}
-                categories={categories}
-                category={category}
-                setCategory={setCategory}
-                search={search}
-                handleRemoveCategory={handleRemoveCategory}
-                handleRemoveSearch={handleRemoveSearch}
-              />
-            }
-          />
+          <Route path="/store" element={<StorePage shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} />} />
+          <Route path="/store/details/:productId" element={<StoreDetailPage />} />
           <Route
             path="/cart"
             element={
@@ -80,7 +52,7 @@ const App = () => {
           <Route path="*" element={<Navigate to="/store" replace />} />
         </Routes>
       </Container>
-    </>
+    </StoreContextProvider>
   );
 };
 
