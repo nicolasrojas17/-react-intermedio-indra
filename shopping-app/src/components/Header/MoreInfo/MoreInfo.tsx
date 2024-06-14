@@ -9,6 +9,8 @@ import * as React from "react";
 import { useContext, useEffect, useState } from "react";
 import { ShoppingCartContext } from "../../../hooks/ShoppingCartContextProvider";
 import Notification from "./Notification";
+import CategoryIcon from "@mui/icons-material/Category";
+import { Link } from "react-router-dom";
 
 export type MoreInfoProps = {
   setCartOpen: (open: boolean) => void;
@@ -46,15 +48,23 @@ const MoreInfo = ({ setCartOpen }: MoreInfoProps) => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem sx={{ minWidth: 200 }}>
-        <Notification icon={<AccountCircleIcon />} numberOfNotifications={0} text="Iniciar sesión" />
+      <MenuItem sx={{ minWidth: 200 }} component={Link} to={"/login"} onClick={() => setMobileMoreAnchorEl(null)}>
+        <Notification icon={<AccountCircleIcon />} text="Login" colorIcon="inherit" />
+      </MenuItem>
+      <MenuItem sx={{ minWidth: 200 }} component={Link} to={"/store"} onClick={() => setMobileMoreAnchorEl(null)}>
+        <Notification icon={<CategoryIcon />} text="Products" colorIcon="inherit" />
       </MenuItem>
     </Menu>
   );
   return (
     <Box display={"flex"}>
       <Box display={{ xs: "none", md: "flex" }}>
-        <Notification icon={<AccountCircleIcon />} numberOfNotifications={0} />
+        <Box component={Link} to={"/login"}>
+          <Notification icon={<AccountCircleIcon />} />
+        </Box>
+        <Box component={Link} to={"/store"}>
+          <Notification icon={<CategoryIcon />} />
+        </Box>
         <Notification icon={<ShoppingCartIcon />} numberOfNotifications={amountProducts} onclick={() => setCartOpen(true)} />
       </Box>
       <IconButton sx={{ display: { xs: "flex", md: "none" } }} color="secondary" onClick={() => setCartOpen(true)}>

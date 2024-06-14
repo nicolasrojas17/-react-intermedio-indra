@@ -3,15 +3,16 @@ import { ReactElement } from "react";
 
 export type NotificationProps = {
   icon: ReactElement;
-  numberOfNotifications: number;
+  numberOfNotifications?: number;
   onclick?: () => void;
   text?: string;
+  colorIcon?: "secondary" | "inherit";
 };
 
-const Notification = ({ icon, numberOfNotifications, text, onclick }: NotificationProps) => {
+const Notification = ({ icon, numberOfNotifications = 0, text, onclick }: NotificationProps) => {
   return (
     <Box onClick={onclick}>
-      <IconButton size="large" aria-label={`show ${numberOfNotifications} new notifications`} color="inherit">
+      <IconButton size="large" aria-label={`show ${numberOfNotifications} new notifications`} color="secondary">
         <Badge badgeContent={numberOfNotifications} color="error">
           {icon}
         </Badge>

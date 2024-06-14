@@ -7,6 +7,7 @@ import CartPage from "../pages/CartPage";
 import StoreDetailPage from "../pages/StoreDetailPage";
 import StorePage from "../pages/StorePage";
 import Navbar from "./Header/NavBar";
+import LoginPage from "../pages/LoginPage";
 
 /*
 const navLinks: MenuItem[] = [
@@ -30,6 +31,7 @@ const App = () => {
             <Route path="/store" element={<StorePage />} />
             <Route path="/store/details/:productId" element={<StoreDetailPage />} />
             <Route path="/cart" element={<CartPage />} />
+            <Route path="/login" element={<LoginPage />} />
             <Route index element={<Navigate to="/store" replace />} />
             <Route path="*" element={<Navigate to="/store" replace />} />
           </Routes>
