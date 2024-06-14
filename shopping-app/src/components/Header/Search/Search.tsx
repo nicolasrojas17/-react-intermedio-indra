@@ -1,8 +1,8 @@
 import SearchIcon from "@mui/icons-material/Search";
-import { Drawer, IconButton } from "@mui/material";
+import { Box, Drawer, IconButton } from "@mui/material";
 import InputBase from "@mui/material/InputBase";
 import { alpha, styled } from "@mui/material/styles";
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { StoreContext } from "../../../hooks/StoreContextProvider";
 
 const SearchContainer = styled("div")(({ theme }) => ({
@@ -48,12 +48,13 @@ const StyledInputBaseMobile = styled(InputBase)(({ theme }) => ({
   },
   backgroundColor: theme.palette.common.white,
   borderRadius: "15px",
-  margin: "25px 5px",
+  margin: "25px 0px",
 }));
 
 const Search = () => {
   const storeContextData = useContext(StoreContext);
   const { search, setSearch } = storeContextData;
+  const inputSearchMobile = useRef({} as any);
 
   const [open, setOpen] = useState(false);
 
@@ -63,9 +64,29 @@ const Search = () => {
     window.history.pushState({}, "", newPathName);
   };
 
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const target = e.target as any;
+    setSearch(target.search.value);
+    const newPathName = target.search.value === "" ? window.location.pathname : `?q=${target.search.value}`;
+    window.history.pushState({}, "", newPathName);
+    setOpen(false);
+  };
+
+  const handleOpenSearchMobile = () => {
+    setOpen(true);
+    setTimeout(() => {
+      inputSearchMobile.current.focus();
+    }, 300);
+  };
+
   return (
     <>
-      <IconButton sx={{ display: { xs: "flex", md: "none" } }} onClick={() => setOpen(true)} color="inherit">
+      <IconButton
+        sx={{ display: { xs: "flex", md: "none" }, marginLeft: "auto" }}
+        onClick={handleOpenSearchMobile}
+        color="inherit"
+      >
         <SearchIcon />
       </IconButton>
 
@@ -90,10 +111,20 @@ const Search = () => {
         sx={{ display: { xs: "block", md: "none" } }}
       >
         <SearchContainer sx={{ display: { xs: "contents", md: "none" } }}>
-          <SearchIconWrapper sx={{ zIndex: 2 }}>
-            <SearchIcon />
-          </SearchIconWrapper>
-          <StyledInputBaseMobile placeholder="Buscar…" inputProps={{ "aria-label": "search" }} />
+          <form onSubmit={onSubmit}>
+            <Box position={"relative"} width={"100%"} display={"flex"} justifyContent={"center"}>
+              <SearchIconWrapper sx={{ zIndex: 2, left: 0 }}>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBaseMobile
+                inputRef={inputSearchMobile}
+                id="search"
+                sx={{ width: "100%" }}
+                placeholder="Buscar…"
+                inputProps={{ "aria-label": "search" }}
+              />
+            </Box>
+          </form>
         </SearchContainer>
       </Drawer>
     </>

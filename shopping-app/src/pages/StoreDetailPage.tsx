@@ -119,11 +119,11 @@ const StoreDetailPage = () => {
         </Grid>
 
         <Grid item xs={12} px={2} mt={5} mx={1}>
-          <Box display={"flex"} justifyContent={"center"} alignItems={"center"} my={3}>
-          {productsByCategory?.map((product: Product, index) => [
-            <CardItem key={product.id} product={product} altImg={`card item-${index + 1}`} />,
-          ])}
-          </Box>
+          <Grid container spacing={2} mb={5} justifyContent={"center"}>
+            {productsByCategory?.map((product: Product, index) => [
+              <CardItem key={product.id} product={product} altImg={`card item-${index + 1}`} />,
+            ])}
+          </Grid>
         </Grid>
       </Grid>
     </Container>
