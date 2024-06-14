@@ -60,12 +60,17 @@ const MoreInfo = ({ setCartOpen }: MoreInfoProps) => {
     <Box display={"flex"}>
       <Box display={{ xs: "none", md: "flex" }}>
         <Box component={Link} to={"/login"}>
-          <Notification icon={<AccountCircleIcon />} />
+          <Notification icon={<AccountCircleIcon />} colorIcon="secondary" />
         </Box>
         <Box component={Link} to={"/store"}>
-          <Notification icon={<CategoryIcon />} />
+          <Notification icon={<CategoryIcon />} colorIcon="secondary" />
         </Box>
-        <Notification icon={<ShoppingCartIcon />} numberOfNotifications={amountProducts} onclick={() => setCartOpen(true)} />
+        <Notification
+          icon={<ShoppingCartIcon />}
+          colorIcon="secondary"
+          numberOfNotifications={amountProducts}
+          onclick={() => setCartOpen(true)}
+        />
       </Box>
       <IconButton sx={{ display: { xs: "flex", md: "none" } }} color="secondary" onClick={() => setCartOpen(true)}>
         <Badge badgeContent={amountProducts} color="error">

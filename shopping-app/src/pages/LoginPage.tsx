@@ -26,7 +26,7 @@ const LoginPage = () => {
 
   return (
     <ChakraProvider>
-      <Flex flexDirection="column" width="100wh" height="70vh" justifyContent="center" alignItems="center">
+      <Flex flexDirection="column" width="100wh" marginTop={"100px"} justifyContent="center" alignItems="center">
         <Stack flexDir="column" mb="2" justifyContent="center" alignItems="center">
           <Avatar />
           <Heading>Welcome</Heading>

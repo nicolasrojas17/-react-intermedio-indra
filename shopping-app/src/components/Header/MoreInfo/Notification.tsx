@@ -9,10 +9,10 @@ export type NotificationProps = {
   colorIcon?: "secondary" | "inherit";
 };
 
-const Notification = ({ icon, numberOfNotifications = 0, text, onclick }: NotificationProps) => {
+const Notification = ({ icon, numberOfNotifications = 0, text, onclick, colorIcon }: NotificationProps) => {
   return (
     <Box onClick={onclick}>
-      <IconButton size="large" aria-label={`show ${numberOfNotifications} new notifications`} color="secondary">
+      <IconButton size="large" aria-label={`show ${numberOfNotifications} new notifications`} color={colorIcon}>
         <Badge badgeContent={numberOfNotifications} color="error">
           {icon}
         </Badge>
