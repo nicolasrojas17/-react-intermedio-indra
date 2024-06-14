@@ -118,14 +118,16 @@ const StoreDetailPage = () => {
           </Box>
         </Grid>
 
-<Typography variant="h4" mt={5} fontWeight={"bold"} textAlign="center">
-  Similar products
-</Typography>
-        <Grid item xs={12} px={2}  mx={1}>
+        <Typography variant="h4" mt={5} fontWeight={"bold"} textAlign="center">
+          Similar products
+        </Typography>
+        <Grid item xs={12} px={2} mx={1}>
           <Grid container spacing={2} mb={5} justifyContent={"center"}>
-            {productsByCategory?.map((product: Product, index) => [
-              <CardItem key={product.id} product={product} altImg={`card item-${index + 1}`} />,
-            ])}
+            {productsByCategory
+              ?.filter((product) => product.id !== Number(productId))
+              .map((product: Product, index) => [
+                <CardItem key={product.id} product={product} altImg={`card item-${index + 1}`} />,
+              ])}
           </Grid>
         </Grid>
       </Grid>
