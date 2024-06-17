@@ -26,7 +26,7 @@ const Navbar = () => {
         <Container maxWidth="xl">
           <Toolbar sx={{ justifyContent: "space-between" }}>
             <Typography variant="h6" component={Link} to={"/store"} color={"secondary"} sx={{ textDecoration: "none" }}>
-              Curso React Intermedio
+              Fake Store
             </Typography>
             <Search />
             <MoreInfo setCartOpen={setCartOpen} />
