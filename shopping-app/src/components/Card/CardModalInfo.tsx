@@ -4,7 +4,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { Box, Button, Modal, Stack } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { useContext } from "react";
+import { useCallback, useContext, useState } from "react";
 import { ShoppingCartContext } from "../../hooks/ShoppingCartContextProvider";
 import { Product } from "../../interfaces/Product";
 import { formatPrice } from "../../util/utils";
@@ -22,13 +22,27 @@ export type CardModalInfoProps = {
 
 const CardModalInfo = (props: CardModalInfoProps) => {
   const shoppingContextData = useContext(ShoppingCartContext);
-  const { amountProductsToAddCart } = shoppingContextData;
-  const { handleRemoveProductsAmount, handleAddProductsAmount, handleAddToCart } = shoppingContextData;
+  const { handleAddToCart } = shoppingContextData;
 
   const { product, altImg, openModalInfo, productInCart } = props;
   const { setOpenModalInfo } = props;
 
+  const [amountProductsToAddCart, setAmountProductsToAddCart] = useState<number>(1);
+
   const handleClose = () => setOpenModalInfo(false);
+
+  const handleRemoveProductsAmount = useCallback(() => {
+    if (amountProductsToAddCart === 1) return;
+    setAmountProductsToAddCart(amountProductsToAddCart - 1);
+  }, [amountProductsToAddCart]);
+
+  const handleAddProductsAmount = useCallback(() => {
+    setAmountProductsToAddCart(amountProductsToAddCart + 1);
+  }, [amountProductsToAddCart]);
+
+  const handleResetAmountProducts = useCallback(() => {
+    setAmountProductsToAddCart(1);
+  }, []);
 
   return (
     <Modal
@@ -114,7 +128,11 @@ const CardModalInfo = (props: CardModalInfoProps) => {
               </IconButton>
             </Box>
           </Box>
-          <Button sx={{ width: "100%", my: 2 }} variant="outlined" onClick={() => handleAddToCart(product)}>
+          <Button
+            sx={{ width: "100%", my: 2 }}
+            variant="outlined"
+            onClick={() => handleAddToCart(product, amountProductsToAddCart, handleResetAmountProducts)}
+          >
             Add to cart
           </Button>
         </Box>

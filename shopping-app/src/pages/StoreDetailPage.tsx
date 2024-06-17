@@ -16,9 +16,10 @@ const StoreDetailPage = () => {
   const { productId } = useParams();
 
   const shoppingContextData = useContext(ShoppingCartContext);
-  const { amountProductsToAddCart, shoppingCart } = shoppingContextData;
-  const { handleRemoveProductsAmount, handleAddProductsAmount, handleAddToCart } = shoppingContextData;
+  const { shoppingCart } = shoppingContextData;
+  const { handleAddToCart } = shoppingContextData;
 
+  const [amountProductsToAddCart, setAmountProductsToAddCart] = useState<number>(1);
   const [product, setProduct] = useState<Product>();
   const [productsByCategory, setProductsByCategory] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -40,6 +41,19 @@ const StoreDetailPage = () => {
   useEffect(() => {
     setProductItem(shoppingCart?.find((item) => item.product.id === Number(productId)));
   }, [shoppingCart, productId]);
+
+  const handleRemoveProductsAmount = useCallback(() => {
+    if (amountProductsToAddCart === 1) return;
+    setAmountProductsToAddCart(amountProductsToAddCart - 1);
+  }, [amountProductsToAddCart]);
+
+  const handleAddProductsAmount = useCallback(() => {
+    setAmountProductsToAddCart(amountProductsToAddCart + 1);
+  }, [amountProductsToAddCart]);
+
+  const handleResetAmountProducts = useCallback(() => {
+    setAmountProductsToAddCart(1);
+  }, []);
 
   if (isLoading) {
     return (
@@ -111,7 +125,7 @@ const StoreDetailPage = () => {
                 </Box>
               </Box>
 
-              <Button sx={{ width: "100%", my: 2 }} variant="outlined" onClick={() => handleAddToCart(product!)}>
+              <Button sx={{ width: "100%", my: 2 }} variant="outlined" onClick={() => handleAddToCart(product!, amountProductsToAddCart, handleResetAmountProducts)}>
                 Add to cart
               </Button>
             </Box>

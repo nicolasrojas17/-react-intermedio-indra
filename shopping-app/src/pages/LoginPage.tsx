@@ -1,31 +1,41 @@
-import { useState } from "react";
 import {
+  Avatar,
+  Box,
+  Button,
+  ChakraProvider,
   Flex,
+  FormControl,
   Heading,
   Input,
-  Button,
   InputGroup,
-  Stack,
   InputLeftElement,
-  Box,
-  Link,
-  Avatar,
-  FormControl,
   InputRightElement,
-  ChakraProvider,
+  Link,
+  Stack,
+  extendTheme,
 } from "@chakra-ui/react";
-import PersonIcon from "@mui/icons-material/Person";
 import HttpsIcon from "@mui/icons-material/Https";
+import PersonIcon from "@mui/icons-material/Person";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { useState } from "react";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleShowClick = () => setShowPassword(!showPassword);
 
+  const theme = extendTheme({
+    colors: {
+      brand: {
+        50: "#FFFFFF",
+        500: "#000000", 
+      },
+    },
+  });
+
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <Flex flexDirection="column" width="100wh" marginTop={"100px"} justifyContent="center" alignItems="center">
         <Stack flexDir="column" mb="2" justifyContent="center" alignItems="center">
           <Avatar />
@@ -54,7 +64,7 @@ const LoginPage = () => {
                     </InputRightElement>
                   </InputGroup>
                 </FormControl>
-                <Button borderRadius={0} type="submit" variant="solid" colorScheme="blue" width="full">
+                <Button borderRadius={0} type="submit" variant="solid" colorScheme="brand" width="full">
                   Login
                 </Button>
               </Stack>

@@ -2,7 +2,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { Box, Button, CardActions, CardContent, CardMedia, Grid, IconButton, Stack, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Product } from "../../interfaces/Product";
 import { formatPrice } from "../../util/utils";
 import { ProductCart } from "../App";
@@ -23,8 +23,23 @@ const CardItem = ({ product, altImg }: CardItemProps) => {
   const { isLoading } = storeContextData;
 
   const shoppingContextData = useContext(ShoppingCartContext);
-  const { shoppingCart, amountProductsToAddCart } = shoppingContextData;
-  const { handleRemoveProductsAmount, handleAddProductsAmount, handleAddToCart } = shoppingContextData;
+  const [amountProductsToAddCart, setAmountProductsToAddCart] = useState<number>(1);
+
+  const { shoppingCart } = shoppingContextData;
+  const { handleAddToCart } = shoppingContextData;
+
+  const handleRemoveProductsAmount = useCallback(() => {
+    if (amountProductsToAddCart === 1) return;
+    setAmountProductsToAddCart(amountProductsToAddCart - 1);
+  }, [amountProductsToAddCart]);
+
+  const handleAddProductsAmount = useCallback(() => {
+    setAmountProductsToAddCart(amountProductsToAddCart + 1);
+  }, [amountProductsToAddCart]);
+
+  const handleResetAmountProducts = useCallback(() => {
+    setAmountProductsToAddCart(1);
+  }, []);
 
   const [productItem, setProductItem] = useState<ProductCart>();
   const [productInCart, setProductInCart] = useState<number>(0);
@@ -126,7 +141,9 @@ const CardItem = ({ product, altImg }: CardItemProps) => {
                 />
               </CardActions>
             </Box>
-            <Button onClick={() => handleAddToCart(product)}>Add to cart</Button>
+            <Button onClick={() => handleAddToCart(product, amountProductsToAddCart, handleResetAmountProducts)}>
+              Add to cart
+            </Button>
           </Card>
         </Grid>
       )}

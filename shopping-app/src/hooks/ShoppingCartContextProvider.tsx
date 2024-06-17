@@ -4,14 +4,11 @@ import { Product } from "../interfaces/Product";
 
 export interface ShoppingCartValue {
   shoppingCart: ProductCart[];
-  amountProductsToAddCart: number;
   setShoppingCart: React.Dispatch<React.SetStateAction<ProductCart[]>>;
-  handleAddToCart: (product: Product) => void;
+  handleAddToCart: (product: Product, amount: number, handleResetAmountProducts: () => void) => void;
   handleRemoveAllItemsCart: (productId: number) => void;
   handleAddProductToCart: (product: Product, amount: number) => void;
   handleRemoveProductFromCart: (productId: number) => void;
-  handleRemoveProductsAmount: () => void;
-  handleAddProductsAmount: () => void;
 }
 
 export const ShoppingCartContext = createContext<ShoppingCartValue>(null as any);
@@ -26,42 +23,27 @@ const ShoppingCartContextProvider = ({ children }: any) => {
     [shoppingCart]
   );
 
-  const [amountProductsToAddCart, setAmountProductsToAddCart] = useState<number>(1);
-
-  const handleResetAmountProducts = useCallback(() => {
-    setAmountProductsToAddCart(1);
-  }, []);
-
   const handleAddToCart = useCallback(
-    (product: Product) => {
+    (product: Product, amount: number, handleResetAmountProducts: () => void) => {
       if (shoppingCart && setShoppingCart && product.id) {
         const productFind = shoppingCart.find((item) => item.product.id === product.id);
         if (!productFind) {
-          setShoppingCart([...shoppingCart, { product, amount: amountProductsToAddCart }]);
+          setShoppingCart([...shoppingCart, { product, amount: amount }]);
           handleResetAmountProducts();
           return;
         }
         setShoppingCart(
           shoppingCart.map((item) => {
             return item.product.id === product.id
-              ? { ...item, amount: productFind.amount ? productFind.amount + amountProductsToAddCart : amountProductsToAddCart }
+              ? { ...item, amount: productFind.amount ? productFind.amount + amount : amount }
               : item;
           })
         );
         handleResetAmountProducts();
       }
     },
-    [shoppingCart, amountProductsToAddCart, setShoppingCart, handleResetAmountProducts]
+    [shoppingCart, setShoppingCart]
   );
-
-  const handleRemoveProductsAmount = useCallback(() => {
-    if (amountProductsToAddCart === 1) return;
-    setAmountProductsToAddCart(amountProductsToAddCart - 1);
-  }, [amountProductsToAddCart]);
-
-  const handleAddProductsAmount = useCallback(() => {
-    setAmountProductsToAddCart(amountProductsToAddCart + 1);
-  }, [amountProductsToAddCart]);
 
   const handleAddProductToCart = useCallback(
     (product: Product, amount: number) => {
@@ -103,25 +85,21 @@ const ShoppingCartContextProvider = ({ children }: any) => {
   const objShoppingCart = useMemo(
     () => ({
       shoppingCart,
-      amountProductsToAddCart,
+
       setShoppingCart,
       handleAddToCart,
       handleRemoveAllItemsCart,
       handleAddProductToCart,
       handleRemoveProductFromCart,
-      handleRemoveProductsAmount,
-      handleAddProductsAmount,
     }),
     [
       shoppingCart,
-      amountProductsToAddCart,
+
       setShoppingCart,
       handleAddToCart,
       handleRemoveAllItemsCart,
       handleAddProductToCart,
       handleRemoveProductFromCart,
-      handleRemoveProductsAmount,
-      handleAddProductsAmount,
     ]
   );
 

@@ -26,7 +26,7 @@ const App = () => {
     <StoreContextProvider>
       <ShoppingCartContextProvider>
         <Navbar />
-        <Container maxWidth={"xl"}>
+        <Container maxWidth={"xl"} >
           <Routes>
             <Route path="/store" element={<StorePage />} />
             <Route path="/store/details/:productId" element={<StoreDetailPage />} />

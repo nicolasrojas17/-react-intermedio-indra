@@ -7,6 +7,7 @@ import { ShoppingCartContext } from "../../hooks/ShoppingCartContextProvider";
 import Cart from "../Cart/Cart";
 import MoreInfo from "./MoreInfo/MoreInfo";
 import Search from "./Search/Search";
+import logo from "../../assets/logo.png";
 
 export type MenuItem = {
   title: string;
@@ -25,8 +26,11 @@ const Navbar = () => {
       <AppBar position="static">
         <Container maxWidth="xl">
           <Toolbar sx={{ justifyContent: "space-between" }}>
-            <Typography variant="h6" component={Link} to={"/store"} color={"secondary"} sx={{ textDecoration: "none" }}>
-              Fake Store
+            <Typography variant="h6" py={2} component={Link} to={"/store"} color={"secondary"} sx={{ textDecoration: "none" }}>
+              <Box display={"flex"} alignItems={"center"}>
+                <img src={logo} alt="Fake Store" style={{ height: "50px" }} />
+                Fake Store
+              </Box>
             </Typography>
             <Search />
             <MoreInfo setCartOpen={setCartOpen} />
