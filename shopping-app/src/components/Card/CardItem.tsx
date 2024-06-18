@@ -3,15 +3,13 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { Box, Button, CardActions, CardContent, CardMedia, Grid, IconButton, Stack, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import { useCallback, useContext, useEffect, useState } from "react";
+import { ShoppingCartContext } from "../../hooks/ShoppingCartContextProvider";
 import { Product } from "../../interfaces/Product";
 import { formatPrice } from "../../util/utils";
 import { ProductCart } from "../App";
-import CardItemSkeleton from "./CardItemSkeleton";
+import ChipItem from "../Chip/ChipItem";
 import CardModalInfo from "./CardModalInfo";
 import CardRating from "./CardRating";
-import ChipItem from "../Chip/ChipItem";
-import { StoreContext } from "../../hooks/StoreContextProvider";
-import { ShoppingCartContext } from "../../hooks/ShoppingCartContextProvider";
 
 export type CardItemProps = {
   product: Product;
@@ -19,8 +17,6 @@ export type CardItemProps = {
 };
 
 const CardItem = ({ product, altImg }: CardItemProps) => {
-  const storeContextData = useContext(StoreContext);
-  const { isLoading } = storeContextData;
 
   const shoppingContextData = useContext(ShoppingCartContext);
   const [amountProductsToAddCart, setAmountProductsToAddCart] = useState<number>(1);
@@ -56,10 +52,7 @@ const CardItem = ({ product, altImg }: CardItemProps) => {
   }, [shoppingCart, product]);
 
   return (
-    <>
-      {isLoading ? (
-        <CardItemSkeleton />
-      ) : (
+  
         <Grid item xs={12} sm={6} md={4} lg={3} px={2} mt={2} pr={0}>
           <Card
             sx={{
@@ -146,8 +139,7 @@ const CardItem = ({ product, altImg }: CardItemProps) => {
             </Button>
           </Card>
         </Grid>
-      )}
-    </>
+   
   );
 };
 
