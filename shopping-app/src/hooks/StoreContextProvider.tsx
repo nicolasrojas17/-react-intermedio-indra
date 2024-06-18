@@ -1,6 +1,6 @@
 import { createContext, useCallback, useEffect, useMemo, useState } from "react";
 import { Product } from "../interfaces/Product";
-import { getProducts } from "../services/productService";
+import { getCategories, getProducts } from "../services/productService";
 
 export interface StoreContextValue {
   productsFiltered: Product[];
@@ -34,6 +34,10 @@ const StoreContextProvider = ({ children }: any) => {
     await getProducts(setProducts, setIsLoading);
   }, []);
 
+  const fetchCategories = useCallback(async () => {
+    await getCategories(setCategories);
+  }, []);
+
   const handleRemoveCategory = () => setCategory("");
 
   const handleChangeCategory = (event: any) => {
@@ -47,15 +51,10 @@ const StoreContextProvider = ({ children }: any) => {
 
   useEffect(() => {
     fetchProducts();
-  }, [fetchProducts]);
+    fetchCategories();
+  }, [fetchProducts, fetchCategories]);
 
   useEffect(() => setProductsFiltered(products), [products]);
-
-  useEffect(() => {
-    const categoriesSearch = products.map((product) => product.category);
-    const uniqueCategories = [...new Set(categoriesSearch)];
-    setCategories(uniqueCategories);
-  }, [products]);
 
   useEffect(() => {
     let filtered = products;

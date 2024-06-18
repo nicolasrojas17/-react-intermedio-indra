@@ -17,6 +17,13 @@ export const getProducts = async (setProducts: (products: any) => void, setIsLoa
     .finally(() => setIsLoading(false));
 };
 
+export const getCategories = async (setCategories: (categories: string[]) => void) => {
+  fetch("https://fakestoreapi.com/products/categories")
+    .then((res) => res.json())
+    .then((json) => setCategories(json))
+    .catch((error) => console.error(error));
+};
+
 export const getProductByCategory = async (
   category: string,
   setProducts: (products: any) => void,
