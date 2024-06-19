@@ -59,8 +59,12 @@ const StoreContextProvider = ({ children }: any) => {
       setProducts(newProducts);
       setProductsFiltered(newProducts);
       localStorage.setItem("products", JSON.stringify(newProducts));
+      if (!categories.includes(product.category)) {
+        setCategories([...categories, product.category]);
+        localStorage.setItem("categories", JSON.stringify([...categories, product.category]));
+      }
     },
-    [products]
+    [products, categories]
   );
 
   const handleDeleteProduct = useCallback(
