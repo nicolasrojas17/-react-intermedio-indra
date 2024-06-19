@@ -1,7 +1,7 @@
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { Badge, Box } from "@mui/material";
+import { Badge, Box, Divider, ListItemIcon } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -11,16 +11,25 @@ import { ShoppingCartContext } from "../../../hooks/ShoppingCartContextProvider"
 import Notification from "./Notification";
 import CategoryIcon from "@mui/icons-material/Category";
 import { Link } from "react-router-dom";
+import { UserContext } from "../../../hooks/UserContextProvider";
+import { ROLE } from "../../../interfaces/User";
+import Logout from "@mui/icons-material/Logout";
+import InventoryIcon from "@mui/icons-material/Inventory";
+import ChecklistIcon from "@mui/icons-material/Checklist";
 
 export type MoreInfoProps = {
   setCartOpen: (open: boolean) => void;
 };
 
 const MoreInfo = ({ setCartOpen }: MoreInfoProps) => {
+  const userContext = useContext(UserContext);
+  const { user, setUser } = userContext;
+
   const shoppingContextData = useContext(ShoppingCartContext);
   const { shoppingCart } = shoppingContextData;
 
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState<null | HTMLElement>(null);
+  const [privateAnchorEl, setPrivateAnchorEl] = useState<null | HTMLElement>(null);
   const [amountProducts, setAmountProducts] = useState(0);
 
   useEffect(() => {
@@ -37,6 +46,20 @@ const MoreInfo = ({ setCartOpen }: MoreInfoProps) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const isPrivateMenuOpen = Boolean(privateAnchorEl);
+
+  const handlePrivateMenuClose = () => {
+    setPrivateAnchorEl(null);
+  };
+
+  const handlePrivateMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setPrivateAnchorEl(event.currentTarget);
+  };
+
+  const logout = () => {
+    setUser({ username: "", role: ROLE.NOT_LOGGED });
+  };
+
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
     <Menu
@@ -48,20 +71,104 @@ const MoreInfo = ({ setCartOpen }: MoreInfoProps) => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem sx={{ minWidth: 200 }} component={Link} to={"/login"} onClick={() => setMobileMoreAnchorEl(null)}>
-        <Notification icon={<AccountCircleIcon />} text="Login" colorIcon="inherit" />
-      </MenuItem>
+      {user.role === ROLE.NOT_LOGGED && (
+        <MenuItem sx={{ minWidth: 200 }} component={Link} to={"/login"} onClick={() => setMobileMoreAnchorEl(null)}>
+          <Notification icon={<AccountCircleIcon />} text="Login" colorIcon="inherit" />
+        </MenuItem>
+      )}
+
       <MenuItem sx={{ minWidth: 200 }} component={Link} to={"/store"} onClick={() => setMobileMoreAnchorEl(null)}>
         <Notification icon={<CategoryIcon />} text="Products" colorIcon="inherit" />
       </MenuItem>
+      {user.role === ROLE.ADMIN && (
+        <>
+          <MenuItem sx={{ minWidth: 200 }} component={Link} to={"/admin/products"} onClick={() => setPrivateAnchorEl(null)}>
+            <Notification icon={<InventoryIcon />} text="Admin Products" colorIcon="inherit" />
+          </MenuItem>
+          <MenuItem sx={{ minWidth: 200 }} component={Link} to={"/admin/orders"} onClick={() => setPrivateAnchorEl(null)}>
+            <Notification icon={<ChecklistIcon />} text="Admin Orders" colorIcon="inherit" />
+          </MenuItem>
+        </>
+      )}
+      {user.role === ROLE.USER && (
+        <MenuItem sx={{ minWidth: 200 }} component={Link} to={"/user/orders"} onClick={() => setPrivateAnchorEl(null)}>
+          <Notification icon={<ChecklistIcon />} text="Orders" colorIcon="inherit" />
+        </MenuItem>
+      )}
+
+      {user.role !== ROLE.NOT_LOGGED && (
+        <>
+          <Divider />
+          <MenuItem onClick={logout}>
+            <ListItemIcon sx={{ marginLeft: 2 }}>
+              <Logout />
+            </ListItemIcon>
+            Logout
+          </MenuItem>
+        </>
+      )}
     </Menu>
   );
+  const privateMenuId = "primary-search-account-menu-private";
+  const renderMenuPrivate = (
+    <Menu
+      anchorEl={privateAnchorEl}
+      anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      id={privateMenuId}
+      keepMounted
+      transformOrigin={{ horizontal: "right", vertical: "top" }}
+      open={isPrivateMenuOpen}
+      onClose={handlePrivateMenuClose}
+    >
+      {user.role === ROLE.ADMIN && (
+        <>
+          <MenuItem sx={{ minWidth: 200 }} component={Link} to={"/admin/products"} onClick={() => setPrivateAnchorEl(null)}>
+            <Notification icon={<InventoryIcon />} text="Admin Products" colorIcon="inherit" />
+          </MenuItem>
+          <MenuItem sx={{ minWidth: 200 }} component={Link} to={"/admin/orders"} onClick={() => setPrivateAnchorEl(null)}>
+            <Notification icon={<ChecklistIcon />} text="Admin Orders" colorIcon="inherit" />
+          </MenuItem>
+        </>
+      )}
+      {user.role === ROLE.USER && (
+        <MenuItem sx={{ minWidth: 200 }} component={Link} to={"/user/orders"} onClick={() => setPrivateAnchorEl(null)}>
+          <Notification icon={<ChecklistIcon />} text="Orders" colorIcon="inherit" />
+        </MenuItem>
+      )}
+
+      <Divider />
+      <MenuItem onClick={logout}>
+        <ListItemIcon sx={{ marginLeft: 2 }}>
+          <Logout />
+        </ListItemIcon>
+        Logout
+      </MenuItem>
+    </Menu>
+  );
+
   return (
     <Box display={"flex"}>
       <Box display={{ xs: "none", md: "flex" }}>
-        <Box component={Link} to={"/login"}>
-          <Notification icon={<AccountCircleIcon />} colorIcon="secondary" />
-        </Box>
+        {user.role === ROLE.NOT_LOGGED ? (
+          <Box component={Link} to={"/login"}>
+            <Notification icon={<AccountCircleIcon />} colorIcon="secondary" />
+          </Box>
+        ) : (
+          <Box>
+            <IconButton
+              size="large"
+              onClick={handlePrivateMenuOpen}
+              aria-label="show more"
+              aria-haspopup="true"
+              aria-controls={privateMenuId}
+              color="secondary"
+            >
+              <AccountCircleIcon />
+            </IconButton>
+            {renderMenuPrivate}
+          </Box>
+        )}
+
         <Box component={Link} to={"/store"}>
           <Notification icon={<CategoryIcon />} colorIcon="secondary" />
         </Box>

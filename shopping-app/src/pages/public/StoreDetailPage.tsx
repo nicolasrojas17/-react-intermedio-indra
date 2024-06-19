@@ -3,14 +3,14 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { Box, Button, CircularProgress, Container, Grid, IconButton, Stack, Typography } from "@mui/material";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { ProductCart } from "../components/App";
-import CardRating from "../components/Card/CardRating";
-import ChipItem from "../components/Chip/ChipItem";
-import { ShoppingCartContext } from "../hooks/ShoppingCartContextProvider";
-import { Product } from "../interfaces/Product";
-import { getProductById } from "../services/productService";
-import { formatPrice } from "../util/utils";
-import CardItem from "../components/Card/CardItem";
+import { ProductCart } from "../../components/App";
+import CardRating from "../../components/Card/CardRating";
+import ChipItem from "../../components/Chip/ChipItem";
+import { ShoppingCartContext } from "../../hooks/ShoppingCartContextProvider";
+import { Product } from "../../interfaces/Product";
+import { getProductById } from "../../services/productService";
+import { formatPrice } from "../../util/utils";
+import CardItem from "../../components/Card/CardItem";
 
 const StoreDetailPage = () => {
   const { productId } = useParams();

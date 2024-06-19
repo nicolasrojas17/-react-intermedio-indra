@@ -1,11 +1,11 @@
 import { Box, Chip, Grid } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import { useContext } from "react";
-import CardItem from "../components/Card/CardItem";
-import CardItemSkeleton from "../components/Card/CardItemSkeleton";
-import Category from "../components/Header/Category/Category";
-import { StoreContext } from "../hooks/StoreContextProvider";
-import { Product } from "../interfaces/Product";
+import CardItem from "../../components/Card/CardItem";
+import CardItemSkeleton from "../../components/Card/CardItemSkeleton";
+import Category from "../../components/Header/Category/Category";
+import { StoreContext } from "../../hooks/StoreContextProvider";
+import { Product } from "../../interfaces/Product";
 
 const StorePage = () => {
   const storeContextData = useContext(StoreContext);
