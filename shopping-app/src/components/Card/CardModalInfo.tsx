@@ -85,7 +85,7 @@ const CardModalInfo = (props: CardModalInfoProps) => {
         <Box width={{ xs: "100%", md: "50%" }} height={{ xs: "300px", md: "100%" }} mr={2}>
           <img
             alt={altImg}
-            src={product.image}
+            src={product.image.includes("http") ? product.image : `data:image/png;base64, ${product.image}`}
             loading="lazy"
             width={"100%"}
             style={{ objectFit: "contain", height: "-webkit-fill-available" }}

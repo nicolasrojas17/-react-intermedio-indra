@@ -33,7 +33,7 @@ interface FormValues {
 
 const initialValues: FormValues = { email: "", password: "" };
 
-const Login = () => {
+const LoginForm = () => {
   const userContext = useContext(UserContext);
   const { setUser } = userContext;
 
@@ -50,6 +50,7 @@ const Login = () => {
       if (authRef) authRef.style.display = "block";
     }
   };
+  
   return (
     <Formik initialValues={initialValues} validationSchema={loginSchema} onSubmit={onSubmit}>
       <Form>
@@ -120,4 +121,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginForm;

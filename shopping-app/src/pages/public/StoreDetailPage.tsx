@@ -71,7 +71,7 @@ const StoreDetailPage = () => {
             <Box width={{ xs: "100%", md: "50%" }} height={{ xs: "300px" }} mr={2}>
               <img
                 alt={product?.title}
-                src={product?.image}
+                src={product?.image.includes("http") ? product?.image : `data:image/png;base64, ${product?.image}`}
                 loading="lazy"
                 width={"100%"}
                 style={{ objectFit: "contain", height: "-webkit-fill-available" }}

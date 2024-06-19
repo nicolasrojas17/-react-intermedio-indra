@@ -20,7 +20,12 @@ const CartViewMobile = ({ viewTotal }: CartViewMobileProps) => {
         <TableRow key={cart.product.id} sx={{ display: { xs: "table-row", md: "none" } }}>
           <TableCell>
             <Box display={"flex"} alignItems={"center"} pr={2} justifyContent={"space-between"}>
-              <img style={{ marginRight: "24px" }} src={cart.product.image} alt={cart.product.title} width="50" />
+              <img
+                style={{ marginRight: "24px" }}
+                src={cart.product.image.includes("http") ? cart.product.image : `data:image/png;base64, ${cart.product.image}`}
+                alt={cart.product.title}
+                width="50"
+              />
               <Typography variant="body2" mx={3}>
                 {cart.product.title}
               </Typography>

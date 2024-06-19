@@ -3,6 +3,7 @@ import { Product } from "../interfaces/Product";
 import { getCategories, getProducts } from "../services/productService";
 
 export interface StoreContextValue {
+  products: Product[];
   productsFiltered: Product[];
   isLoading: boolean;
   categories: string[];
@@ -13,6 +14,8 @@ export interface StoreContextValue {
   handleRemoveCategory: () => void;
   handleRemoveSearch: () => void;
   handleChangeCategory: (event: any) => void;
+  handleDeleteProduct: (id: number) => void;
+  handleAddProduct: (product: Product) => void;
 }
 
 export const StoreContext = createContext<StoreContextValue>(null as any);
@@ -49,6 +52,27 @@ const StoreContextProvider = ({ children }: any) => {
     window.history.pushState({}, "", window.location.pathname);
   };
 
+  const handleAddProduct = useCallback(
+    (product: Product) => {
+      product = { ...product, id: products.length + 2 };
+      const newProducts = [...products, product];
+      setProducts(newProducts);
+      setProductsFiltered(newProducts);
+      localStorage.setItem("products", JSON.stringify(newProducts));
+    },
+    [products]
+  );
+
+  const handleDeleteProduct = useCallback(
+    (id: number) => {
+      const newProducts = products.filter((product) => product.id !== id);
+      setProducts(newProducts);
+      setProductsFiltered(newProducts);
+      localStorage.setItem("products", JSON.stringify(newProducts));
+    },
+    [products]
+  );
+
   useEffect(() => {
     fetchProducts();
     fetchCategories();
@@ -65,6 +89,7 @@ const StoreContextProvider = ({ children }: any) => {
 
   const objStore = useMemo(
     () => ({
+      products,
       productsFiltered,
       isLoading,
       categories,
@@ -75,8 +100,21 @@ const StoreContextProvider = ({ children }: any) => {
       handleRemoveCategory,
       handleRemoveSearch,
       handleChangeCategory,
+      handleDeleteProduct,
+      handleAddProduct,
     }),
-    [productsFiltered, isLoading, categories, category, search, setCategory, setSearch]
+    [
+      products,
+      productsFiltered,
+      isLoading,
+      categories,
+      category,
+      search,
+      setCategory,
+      setSearch,
+      handleDeleteProduct,
+      handleAddProduct,
+    ]
   );
 
   return <StoreContext.Provider value={objStore}>{children}</StoreContext.Provider>;

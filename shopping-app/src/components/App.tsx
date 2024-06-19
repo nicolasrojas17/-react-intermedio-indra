@@ -15,6 +15,13 @@ import StorePage from "../pages/public/StorePage";
 import Footer from "./Footer/Footer";
 import Navbar from "./Header/NavBar";
 import AdminOrdersPage from "../pages/private/AdminOrdersPage";
+import { extendTheme } from "@chakra-ui/react";
+
+export const themeChakra = extendTheme({
+  colors: {
+    brand: { 50: "#FFFFFF", 500: "#000000" },
+  },
+});
 
 export interface ProductCart {
   product: Product;

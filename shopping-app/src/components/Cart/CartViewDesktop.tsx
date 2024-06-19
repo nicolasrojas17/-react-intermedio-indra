@@ -21,7 +21,11 @@ const CartViewDesktop = ({ viewTotal }: CartViewDesktopProps) => {
           sx={{ display: { xs: "none", md: "table-row" }, "&:last-child td, &:last-child th": { border: 0 } }}
         >
           <TableCell align="right">
-            <img src={cart.product.image} alt={cart.product.title} width="50" />
+            <img
+              src={cart.product.image.includes("http") ? cart.product.image : `data:image/png;base64, ${cart.product.image}`}
+              alt={cart.product.title}
+              width="50"
+            />
           </TableCell>
           <TableCell align="right" sx={{ maxWidth: "250px" }}>
             {cart.product.title}

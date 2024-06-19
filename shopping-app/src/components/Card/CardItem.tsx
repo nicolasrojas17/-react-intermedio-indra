@@ -74,7 +74,7 @@ const CardItem = ({ product, altImg }: CardItemProps) => {
               height={200}
               width={"100%"}
               component={"img"}
-              image={product.image}
+              src={product.image.includes("http") ? product.image : `data:image/png;base64, ${product.image}`}
               alt={altImg}
               loading="lazy"
               onClick={handleOpen}
