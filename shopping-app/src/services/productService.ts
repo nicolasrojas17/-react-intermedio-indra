@@ -15,7 +15,7 @@ export const getProducts = async (setProducts: (products: any) => void, setIsLoa
       json.map((product: any) => {
         const priceCol = transformPrice(product.price);
         const discount = generateDiscount(priceCol);
-        const priceWithDiscount = discount > 0 ? priceCol * (discount / 100) : priceCol;
+        const priceWithDiscount = discount > 0 ? priceCol - (priceCol * (discount / 100)) : priceCol;
         return { ...product, discount, price: priceCol, priceDiscount: priceWithDiscount };
       })
     )
@@ -51,10 +51,7 @@ export const getProductById = async (
   if (localStorage.getItem("products")) {
     const products = JSON.parse(localStorage.getItem("products") ?? "");
     const product = products.find((product: any) => product.id === parseInt(productId));
-    const priceCol = transformPrice(product.price);
-    const discount = generateDiscount(priceCol);
-    const priceWithDiscount = discount > 0 ? priceCol * (discount / 100) : priceCol;
-    setProduct({ ...product, discount, price: priceCol, priceDiscount: priceWithDiscount });
+    setProduct(product);
     getProductByCategory(product.category).then((json) => setProductsByCategory(json));
     setIsLoading(false);
   }
