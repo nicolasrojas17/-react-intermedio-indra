@@ -4,7 +4,6 @@ import {
   ChakraProvider,
   Flex,
   Heading,
-  Link,
   Stack,
   extendTheme
 } from "@chakra-ui/react";
@@ -27,12 +26,6 @@ const LoginPage = () => {
             <Login />
           </Box>
         </Stack>
-        <Box>
-          New to us?
-          <Link color="teal.500" href="#">
-            Sign Up
-          </Link>
-        </Box>
       </Flex>
     </ChakraProvider>
   );
