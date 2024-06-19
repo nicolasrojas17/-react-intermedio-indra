@@ -2,7 +2,14 @@ import { Product } from "../interfaces/Product";
 import { generateDiscount, transformPrice } from "../util/utils";
 
 export const getProducts = async (setProducts: (products: any) => void, setIsLoading: (val: boolean) => void) => {
-  fetch("https://fakestoreapi.com/products")
+  if (localStorage.getItem("products")) {
+    const products = JSON.parse(localStorage.getItem("products") ?? "");
+    setProducts(products);
+    setIsLoading(false);
+    return;
+  }
+
+  fetch(`https://fakestoreapi.com/products`)
     .then((res) => res.json())
     .then((json) =>
       json.map((product: any) => {
@@ -12,36 +19,27 @@ export const getProducts = async (setProducts: (products: any) => void, setIsLoa
         return { ...product, discount, price: priceCol, priceDiscount: priceWithDiscount };
       })
     )
-    .then((json) => setProducts(json))
+    .then((json) => {
+      localStorage.setItem("products", JSON.stringify(json));
+      setProducts(json);
+    })
     .catch((error) => console.error(error))
     .finally(() => setIsLoading(false));
 };
 
 export const getCategories = async (setCategories: (categories: string[]) => void) => {
-  fetch("https://fakestoreapi.com/products/categories")
+  if (localStorage.getItem("categories")) {
+    const categories = JSON.parse(localStorage.getItem("categories") ?? "");
+    setCategories(categories);
+    return;
+  }
+  fetch(`https://fakestoreapi.com/products/categories`)
     .then((res) => res.json())
-    .then((json) => setCategories(json))
+    .then((json) => {
+      localStorage.setItem("categories", JSON.stringify(json));
+      setCategories(json);
+    })
     .catch((error) => console.error(error));
-};
-
-export const getProductByCategory = async (
-  category: string,
-  setProducts: (products: any) => void,
-  setIsLoading: (val: boolean) => void
-) => {
-  fetch(`https://fakestoreapi.com/products/category/${category}`)
-    .then((res) => res.json())
-    .then((json) =>
-      json.map((product: any) => {
-        const priceCol = transformPrice(product.price);
-        const discount = generateDiscount(priceCol);
-        const priceWithDiscount = discount > 0 ? priceCol * (discount / 100) : priceCol;
-        return { ...product, discount, price: priceCol, priceDiscount: priceWithDiscount };
-      })
-    )
-    .then((json) => setProducts(json))
-    .catch((error) => console.error(error))
-    .finally(() => setIsLoading(false));
 };
 
 export const getProductById = async (
@@ -50,24 +48,19 @@ export const getProductById = async (
   setProductsByCategory: (products: Product[]) => void,
   setIsLoading: (val: boolean) => void
 ) => {
-  fetch(`https://fakestoreapi.com/products/${productId}`)
-    .then((res) => res.json())
-    .then((json) => {
-      const priceCol = transformPrice(json.price);
-      const discount = generateDiscount(priceCol);
-      const priceWithDiscount = discount > 0 ? priceCol * (discount / 100) : priceCol;
-      setProduct({ ...json, discount, price: priceCol, priceDiscount: priceWithDiscount });
-      return getProductByCategory(json.category, setProductsByCategory, setIsLoading);
-    })
-    .then((json: any) =>
-      json?.map((product: any) => {
-        const priceCol = transformPrice(product.price);
-        const discount = generateDiscount(priceCol);
-        const priceWithDiscount = discount > 0 ? priceCol * (discount / 100) : priceCol;
-        return { ...product, discount, price: priceCol, priceDiscount: priceWithDiscount };
-      })
-    )
-    .then((json) => setProductsByCategory(json))
-    .catch((error) => console.error(error))
-    .finally(() => setIsLoading(false));
+  if (localStorage.getItem("products")) {
+    const products = JSON.parse(localStorage.getItem("products") ?? "");
+    const product = products.find((product: any) => product.id === parseInt(productId));
+    const priceCol = transformPrice(product.price);
+    const discount = generateDiscount(priceCol);
+    const priceWithDiscount = discount > 0 ? priceCol * (discount / 100) : priceCol;
+    setProduct({ ...product, discount, price: priceCol, priceDiscount: priceWithDiscount });
+    getProductByCategory(product.category).then((json) => setProductsByCategory(json));
+    setIsLoading(false);
+  }
+};
+
+export const getProductByCategory = async (category: string) => {
+  const products = JSON.parse(localStorage.getItem("products") ?? "");
+  return products.filter((product: any) => product.category === category);
 };
