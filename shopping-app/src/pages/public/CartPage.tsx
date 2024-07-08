@@ -5,9 +5,13 @@ import { Link, useNavigate } from "react-router-dom";
 import Cart from "../../components/Cart/Cart";
 import { ShoppingCartContext } from "../../hooks/ShoppingCartContextProvider";
 import { formatPrice } from "../../util/utils";
+import { UserContext } from "../../hooks/UserContextProvider";
+import { ROLE } from "../../interfaces/User";
 
 const CartPage = () => {
   const navigate = useNavigate();
+  const userContext = useContext(UserContext);
+  const { user } = userContext;
 
   const shoppingContextData = useContext(ShoppingCartContext);
   const { shoppingCart, handleCheckout } = shoppingContextData;
@@ -64,11 +68,16 @@ const CartPage = () => {
             </Typography>
             <Typography variant="body1"> {`$${formatPrice(total)}`}</Typography>
           </Box>
-
           <Box display={"flex"} justifyContent={"center"} mt={2}>
-            <Button variant="contained" color="primary" onClick={handleCheckout}>
-              Checkout
-            </Button>
+            {user.role === ROLE.NOT_LOGGED ? (
+              <Button variant="contained" color="primary" component={Link} to={"/login"}>
+                Login to buy
+              </Button>
+            ) : (
+              <Button variant="contained" color="primary" onClick={handleCheckout}>
+                Buy
+              </Button>
+            )}
           </Box>
         </Grid>
       </Grid>

@@ -51,9 +51,9 @@ const App = () => {
               <Route
                 path="/admin/products"
                 element={
-               //   <ProtectedRouteAdmin role={user.role}>
+                  <ProtectedRouteAdmin role={user.role}>
                     <AdminProductsPage />
-                //  </ProtectedRouteAdmin>
+                  </ProtectedRouteAdmin>
                 }
               />
               <Route
