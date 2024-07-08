@@ -25,7 +25,6 @@ import { StoreContext } from "../../hooks/StoreContextProvider";
 import Swal from "sweetalert2";
 
 const productSchema = Yup.object().shape({
-  image: Yup.string().required("Campo requerido."),
   title: Yup.string().required("Campo requerido."),
   description: Yup.string().required("Campo requerido."),
   category: Yup.string().required("Campo requerido."),
@@ -42,28 +41,54 @@ interface FormValues {
   discount: number;
 }
 
-const initialValues: FormValues = { image: "", title: "", description: "", category: "", price: 0, discount: 0 };
-
 export type ProductFormProps = {
-  setOpenModal?: (value: boolean) => void;
+  modal: any;
+  setModal?: (value: any) => void;
 };
 
-const ProductForm = ({ setOpenModal }: ProductFormProps) => {
+const ProductForm = ({ modal, setModal }: ProductFormProps) => {
   const store = useContext(StoreContext);
-  const { handleAddProduct } = store;
+  const { handleAddProduct, handleUpdateProduct } = store;
   const inputRef = useRef<any>();
   const [imageBase64, setImageBase64] = useState("");
 
+  const getProductInfo = () => {
+    const product = modal.productId && store.products.find((product) => product.id === modal.productId)!;
+    if (product) {
+      return {
+        image: "",
+        title: product.title,
+        description: product.description,
+        category: product.category,
+        price: product.price,
+        discount: product.discount,
+      };
+    } else {
+      return { image: "", title: "", description: "", category: "", price: 0, discount: 0 };
+    }
+  };
+
+  const initialValues: FormValues = getProductInfo();
+
   const onSubmit = async (values: FormValues) => {
+    const newImage = modal.productId && store.products.find((product) => product.id === modal.productId)?.image;
+
     const newProduct = {
       ...values,
-      image: imageBase64,
+      image: imageBase64 === "" ? newImage : imageBase64,
       priceDiscount: values.price - values.price * (values.discount / 100),
       rating: { rate: 0, count: 0 },
     } as Product;
-    handleAddProduct(newProduct);
-    if (setOpenModal) setOpenModal(false);
-    Swal.fire({ title: "Added!", text: "Your product has been added.", icon: "success" });
+
+    if (modal.productId) {
+      if (setModal) setModal({ open: false, idProduct: null });
+      handleUpdateProduct({ ...newProduct, id: modal.productId });
+      Swal.fire({ title: "Updated!", text: "Your product has been updated.", icon: "success" });
+    } else {
+      if (setModal) setModal({ open: false, idProduct: null });
+      handleAddProduct(newProduct);
+      Swal.fire({ title: "Added!", text: "Your product has been added.", icon: "success" });
+    }
   };
 
   const handleChangeImage = async (e: React.ChangeEvent<any>, handleChange: (e: React.ChangeEvent<any>) => void) => {
@@ -86,7 +111,9 @@ const ProductForm = ({ setOpenModal }: ProductFormProps) => {
                     return (
                       <Flex width="100%" flexDirection={"column"}>
                         <Input
-                          value={field.value}
+                          defaultValue={
+                            modal.productId && store.products.find((product) => product.id === modal.productId)?.image
+                          }
                           paddingLeft={10}
                           type="text"
                           placeholder="Image"
@@ -117,10 +144,10 @@ const ProductForm = ({ setOpenModal }: ProductFormProps) => {
                   <TextSnippetIcon />
                 </InputLeftElement>
                 <Field name="title">
-                  {({ field, form: { touched, errors } }: any) => {
+                  {({ field, form: { touched, errors, handleChange } }: any) => {
                     return (
                       <Flex width="100%" flexDirection={"column"}>
-                        <Input {...field} paddingLeft={10} name="title" type="text" placeholder="Title" />
+                        <Input {...field} paddingLeft={10} name="title" type="text" placeholder="Title" onChange={handleChange} />
                         {touched[field.name] && errors[field.name] && (
                           <FormHelperText color={"red.600"}>{errors[field.name]}</FormHelperText>
                         )}
@@ -137,10 +164,17 @@ const ProductForm = ({ setOpenModal }: ProductFormProps) => {
                   <TextSnippetIcon />
                 </InputLeftElement>
                 <Field name="description">
-                  {({ field, form: { touched, errors } }: any) => {
+                  {({ field, form: { touched, errors, handleChange } }: any) => {
                     return (
                       <Flex width="100%" flexDirection={"column"}>
-                        <Input {...field} paddingLeft={10} name="description" type="text" placeholder="Description" />
+                        <Input
+                          {...field}
+                          paddingLeft={10}
+                          name="description"
+                          type="text"
+                          placeholder="Description"
+                          onChange={handleChange}
+                        />
                         {touched[field.name] && errors[field.name] && (
                           <FormHelperText color={"red.600"}>{errors[field.name]}</FormHelperText>
                         )}
@@ -157,10 +191,17 @@ const ProductForm = ({ setOpenModal }: ProductFormProps) => {
                   <CategoryIcon />
                 </InputLeftElement>
                 <Field name="category">
-                  {({ field, form: { touched, errors } }: any) => {
+                  {({ field, form: { touched, errors, handleChange } }: any) => {
                     return (
                       <Flex width="100%" flexDirection={"column"}>
-                        <Input {...field} paddingLeft={10} name="category" type="text" placeholder="Category" />
+                        <Input
+                          {...field}
+                          paddingLeft={10}
+                          name="category"
+                          type="text"
+                          placeholder="Category"
+                          onChange={handleChange}
+                        />
                         {touched[field.name] && errors[field.name] && (
                           <FormHelperText color={"red.600"}>{errors[field.name]}</FormHelperText>
                         )}
@@ -177,10 +218,17 @@ const ProductForm = ({ setOpenModal }: ProductFormProps) => {
                   <AttachMoneyIcon />
                 </InputLeftElement>
                 <Field name="price">
-                  {({ field, form: { touched, errors } }: any) => {
+                  {({ field, form: { touched, errors, handleChange } }: any) => {
                     return (
                       <Flex width="100%" flexDirection={"column"}>
-                        <Input {...field} paddingLeft={10} name="price" type="number" placeholder="Price" />
+                        <Input
+                          {...field}
+                          paddingLeft={10}
+                          name="price"
+                          type="number"
+                          placeholder="Price"
+                          onChange={handleChange}
+                        />
                         {touched[field.name] && errors[field.name] && (
                           <FormHelperText color={"red.600"}>{errors[field.name]}</FormHelperText>
                         )}
@@ -194,10 +242,17 @@ const ProductForm = ({ setOpenModal }: ProductFormProps) => {
                   <PercentIcon />
                 </InputLeftElement>
                 <Field name="discount">
-                  {({ field, form: { touched, errors } }: any) => {
+                  {({ field, form: { touched, errors, handleChange } }: any) => {
                     return (
                       <Flex width="100%" flexDirection={"column"}>
-                        <Input {...field} paddingLeft={10} name="discount" type="number" placeholder="Discount" />
+                        <Input
+                          {...field}
+                          paddingLeft={10}
+                          name="discount"
+                          type="number"
+                          placeholder="Discount"
+                          onChange={handleChange}
+                        />
                         {touched[field.name] && errors[field.name] && (
                           <FormHelperText color={"red.600"}>{errors[field.name]}</FormHelperText>
                         )}

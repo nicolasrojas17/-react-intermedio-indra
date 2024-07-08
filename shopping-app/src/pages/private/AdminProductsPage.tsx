@@ -11,15 +11,16 @@ import TableRow from "@mui/material/TableRow";
 import { useContext, useState } from "react";
 import Swal from "sweetalert2";
 import ModalCustom from "../../components/Modal/Modal";
+import ProductForm from "../../components/Product/ProductForm";
 import { StoreContext } from "../../hooks/StoreContextProvider";
 import { Product } from "../../interfaces/Product";
 import { formatPrice } from "../../util/utils";
-import ProductForm from "../../components/Product/ProductForm";
 
 const AdminProductsPage = () => {
   const store = useContext(StoreContext);
   const { products, handleDeleteProduct } = store;
-  const [openModal, setOpenModal] = useState(false);
+  const [modal, setModal] = useState<any>({ open: false, productId: null });
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -54,7 +55,12 @@ const AdminProductsPage = () => {
   return (
     <Box my={5}>
       <Box display={"grid"} gridTemplateColumns={{ md: "20% 80%", sm: "30% 70%" }}>
-        <Button variant="outlined" color="primary" sx={{ height: "min-content" }} onClick={() => setOpenModal(true)}>
+        <Button
+          variant="outlined"
+          color="primary"
+          sx={{ height: "min-content" }}
+          onClick={() => setModal({ open: true, productId: null })}
+        >
           New Product
         </Button>
         <TablePagination
@@ -108,7 +114,7 @@ const AdminProductsPage = () => {
                     {product.discount}%
                   </TableCell>
                   <TableCell sx={{ maxWidth: "80px" }} align="center">
-                    <IconButton aria-label="edit">
+                    <IconButton aria-label="edit" onClick={() => setModal({ open: true, productId: product.id })}>
                       <EditIcon color="info" />
                     </IconButton>
                     <IconButton aria-label="delete" onClick={() => handleDelete(product.id)}>
@@ -128,11 +134,12 @@ const AdminProductsPage = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <ModalCustom open={openModal} setOpen={setOpenModal}>
+
+      <ModalCustom open={modal.open} setOpen={() => setModal({ open: false, productId: null })}>
         <Typography id="transition-modal-title" variant="h6" component="h2">
           New Product
         </Typography>
-        <ProductForm setOpenModal={setOpenModal} />
+        <ProductForm setModal={setModal} modal={modal} />
       </ModalCustom>
     </Box>
   );

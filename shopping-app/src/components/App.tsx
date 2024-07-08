@@ -7,15 +7,14 @@ import { UserContext } from "../hooks/UserContextProvider";
 import { Product } from "../interfaces/Product";
 import { ROLE } from "../interfaces/User";
 import AdminProductsPage from "../pages/private/AdminProductsPage";
-import UserOrdersPage from "../pages/private/UserOrdersPage";
 import CartPage from "../pages/public/CartPage";
 import LoginPage from "../pages/public/LoginPage";
 import StoreDetailPage from "../pages/public/StoreDetailPage";
 import StorePage from "../pages/public/StorePage";
 import Footer from "./Footer/Footer";
 import Navbar from "./Header/NavBar";
-import AdminOrdersPage from "../pages/private/AdminOrdersPage";
 import { extendTheme } from "@chakra-ui/react";
+import OrdersPage from "../pages/private/OrdersPage";
 
 export const themeChakra = extendTheme({
   colors: {
@@ -52,16 +51,16 @@ const App = () => {
               <Route
                 path="/admin/products"
                 element={
-                  <ProtectedRouteAdmin role={user.role}>
+               //   <ProtectedRouteAdmin role={user.role}>
                     <AdminProductsPage />
-                  </ProtectedRouteAdmin>
+                //  </ProtectedRouteAdmin>
                 }
               />
               <Route
                 path="/admin/orders"
                 element={
                   <ProtectedRouteAdmin role={user.role}>
-                    <AdminOrdersPage />
+                    <OrdersPage />
                   </ProtectedRouteAdmin>
                 }
               />
@@ -69,7 +68,7 @@ const App = () => {
                 path="/user/orders"
                 element={
                   <ProtectedRouteUser role={user.role}>
-                    <UserOrdersPage />
+                    <OrdersPage />
                   </ProtectedRouteUser>
                 }
               />

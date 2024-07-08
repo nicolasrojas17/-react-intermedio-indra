@@ -81,15 +81,16 @@ const MoreInfo = ({ setCartOpen }: MoreInfoProps) => {
         <Notification icon={<CategoryIcon />} text="Products" colorIcon="inherit" />
       </MenuItem>
       {user.role === ROLE.ADMIN && (
-        <>
-          <MenuItem sx={{ minWidth: 200 }} component={Link} to={"/admin/products"} onClick={() => setPrivateAnchorEl(null)}>
-            <Notification icon={<InventoryIcon />} text="Admin Products" colorIcon="inherit" />
-          </MenuItem>
-          <MenuItem sx={{ minWidth: 200 }} component={Link} to={"/admin/orders"} onClick={() => setPrivateAnchorEl(null)}>
-            <Notification icon={<ChecklistIcon />} text="Admin Orders" colorIcon="inherit" />
-          </MenuItem>
-        </>
+        <MenuItem sx={{ minWidth: 200 }} component={Link} to={"/admin/products"} onClick={() => setPrivateAnchorEl(null)}>
+          <Notification icon={<InventoryIcon />} text="Admin Products" colorIcon="inherit" />
+        </MenuItem>
       )}
+      {user.role === ROLE.ADMIN && (
+        <MenuItem sx={{ minWidth: 200 }} component={Link} to={"/admin/orders"} onClick={() => setPrivateAnchorEl(null)}>
+          <Notification icon={<ChecklistIcon />} text="Admin Orders" colorIcon="inherit" />
+        </MenuItem>
+      )}
+
       {user.role === ROLE.USER && (
         <MenuItem sx={{ minWidth: 200 }} component={Link} to={"/user/orders"} onClick={() => setPrivateAnchorEl(null)}>
           <Notification icon={<ChecklistIcon />} text="Orders" colorIcon="inherit" />
@@ -97,15 +98,12 @@ const MoreInfo = ({ setCartOpen }: MoreInfoProps) => {
       )}
 
       {user.role !== ROLE.NOT_LOGGED && (
-        <>
-          <Divider />
-          <MenuItem onClick={logout}>
-            <ListItemIcon sx={{ marginLeft: 2 }}>
-              <Logout />
-            </ListItemIcon>
-            Logout
-          </MenuItem>
-        </>
+        <MenuItem onClick={logout}>
+          <ListItemIcon sx={{ marginLeft: 2 }}>
+            <Logout />
+          </ListItemIcon>
+          Logout
+        </MenuItem>
       )}
     </Menu>
   );
@@ -121,14 +119,14 @@ const MoreInfo = ({ setCartOpen }: MoreInfoProps) => {
       onClose={handlePrivateMenuClose}
     >
       {user.role === ROLE.ADMIN && (
-        <>
-          <MenuItem sx={{ minWidth: 200 }} component={Link} to={"/admin/products"} onClick={() => setPrivateAnchorEl(null)}>
-            <Notification icon={<InventoryIcon />} text="Admin Products" colorIcon="inherit" />
-          </MenuItem>
-          <MenuItem sx={{ minWidth: 200 }} component={Link} to={"/admin/orders"} onClick={() => setPrivateAnchorEl(null)}>
-            <Notification icon={<ChecklistIcon />} text="Admin Orders" colorIcon="inherit" />
-          </MenuItem>
-        </>
+        <MenuItem sx={{ minWidth: 200 }} component={Link} to={"/admin/products"} onClick={() => setPrivateAnchorEl(null)}>
+          <Notification icon={<InventoryIcon />} text="Admin Products" colorIcon="inherit" />
+        </MenuItem>
+      )}
+      {user.role === ROLE.ADMIN && (
+        <MenuItem sx={{ minWidth: 200 }} component={Link} to={"/admin/orders"} onClick={() => setPrivateAnchorEl(null)}>
+          <Notification icon={<ChecklistIcon />} text="Admin Orders" colorIcon="inherit" />
+        </MenuItem>
       )}
       {user.role === ROLE.USER && (
         <MenuItem sx={{ minWidth: 200 }} component={Link} to={"/user/orders"} onClick={() => setPrivateAnchorEl(null)}>

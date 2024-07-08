@@ -16,6 +16,7 @@ export interface StoreContextValue {
   handleChangeCategory: (event: any) => void;
   handleDeleteProduct: (id: number) => void;
   handleAddProduct: (product: Product) => void;
+  handleUpdateProduct: (product: Product) => void;
 }
 
 export const StoreContext = createContext<StoreContextValue>(null as any);
@@ -67,6 +68,20 @@ const StoreContextProvider = ({ children }: any) => {
     [products, categories]
   );
 
+  const handleUpdateProduct = useCallback(
+    (product: Product) => {
+      const newProducts = products.map((p) => (p.id === product.id ? product : p));
+      setProducts(newProducts);
+      setProductsFiltered(newProducts);
+      localStorage.setItem("products", JSON.stringify(newProducts));
+      if (!categories.includes(product.category)) {
+        setCategories([...categories, product.category]);
+        localStorage.setItem("categories", JSON.stringify([...categories, product.category]));
+      }
+    },
+    [products, categories]
+  );
+
   const handleDeleteProduct = useCallback(
     (id: number) => {
       const newProducts = products.filter((product) => product.id !== id);
@@ -106,6 +121,7 @@ const StoreContextProvider = ({ children }: any) => {
       handleChangeCategory,
       handleDeleteProduct,
       handleAddProduct,
+      handleUpdateProduct
     }),
     [
       products,
@@ -118,6 +134,7 @@ const StoreContextProvider = ({ children }: any) => {
       setSearch,
       handleDeleteProduct,
       handleAddProduct,
+      handleUpdateProduct
     ]
   );
 

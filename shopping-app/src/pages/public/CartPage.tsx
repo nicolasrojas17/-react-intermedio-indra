@@ -10,7 +10,7 @@ const CartPage = () => {
   const navigate = useNavigate();
 
   const shoppingContextData = useContext(ShoppingCartContext);
-  const { shoppingCart } = shoppingContextData;
+  const { shoppingCart, handleCheckout } = shoppingContextData;
 
   const [subTotal, setSubTotal] = useState<number>(0);
   const [shipping, setShipping] = useState<number>(0);
@@ -63,6 +63,12 @@ const CartPage = () => {
               Total
             </Typography>
             <Typography variant="body1"> {`$${formatPrice(total)}`}</Typography>
+          </Box>
+
+          <Box display={"flex"} justifyContent={"center"} mt={2}>
+            <Button variant="contained" color="primary" onClick={handleCheckout}>
+              Checkout
+            </Button>
           </Box>
         </Grid>
       </Grid>
